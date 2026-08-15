@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About">
+	<div class="container">
+		<header class="page-header">
+			<h1>About This Project</h1>
+		</header>
+
+		<article class="prose">
+			<p>
+				This site catalogues terrain for a custom Mordheim board — ruined buildings, scatter
+				terrain, and modular tiles built for skirmish wargaming in the City of the Damned.
+			</p>
+			<p>
+				Each entry tracks build status, dimensions, materials, and work-in-progress photos. Add a
+				new markdown file in <code>src/content/terrain/</code> and drop photos into
+				<code>public/images/terrain/</code> to catalogue your next piece.
+			</p>
+		</article>
+	</div>
+</BaseLayout>
+
+<style>
+	code {
+		font-size: 0.9em;
+		padding: 0.15em 0.4em;
+		background: var(--bg-elevated);
+		border: 1px solid var(--border);
+		border-radius: 0.25rem;
+	}
+</style>

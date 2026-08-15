@@ -1,43 +1,58 @@
-# Astro Starter Kit: Minimal
+# Mordheim Board — Terrain Catalogue
 
-```sh
-npm create astro@latest -- --template minimal
+A static site for cataloguing terrain pieces for a custom Mordheim board. Built with [Astro](https://astro.build) and deployed to GitHub Pages.
+
+## Local Development
+
+```bash
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Open [http://localhost:4321/morpheous/](http://localhost:4321/morpheous/) (note the base path).
 
-## 🚀 Project Structure
+## Adding a Terrain Piece
 
-Inside of your Astro project, you'll see the following folders and files:
+1. Create a photo folder: `public/images/terrain/my-piece/`
+2. Add a markdown entry: `src/content/terrain/my-piece.md`
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+Example frontmatter:
+
+```yaml
+---
+title: My Piece
+type: building
+status: in-progress
+dimensions: "6×4×8 in"
+materials: [XPS foam, plasticard]
+tags: [ruins]
+heroImage: /images/terrain/my-piece/hero.jpg
+gallery:
+  - /images/terrain/my-piece/wip-01.jpg
+started: 2026-08-01
+---
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Valid values:
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+- **type:** `building`, `scatter`, `tile`, `bridge`, `other`
+- **status:** `planned`, `in-progress`, `complete`
 
-Any static assets, like images, can be placed in the `public/` directory.
+3. Push to GitHub — the site rebuilds automatically.
 
-## 🧞 Commands
+## GitHub Pages Deployment
 
-All commands are run from the root of the project, from a terminal:
+This project deploys from [LiamSeston/morpheous](https://github.com/LiamSeston/morpheous).
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+1. Push to the `main` branch
+2. In repo **Settings → Pages**, set source to **GitHub Actions**
+3. Site will be live at [https://liamseston.github.io/morpheous/](https://liamseston.github.io/morpheous/)
 
-## 👀 Want to learn more?
+## Project Structure
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+```
+src/content/terrain/     Markdown entries (one per piece)
+public/images/terrain/   Photos organised by piece
+src/components/          Cards, filters, gallery
+src/pages/               Index, about, detail routes
+```

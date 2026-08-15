@@ -1,0 +1,73 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import TypeBadge from '../components/TypeBadge.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	entry: CollectionEntry<'terrain'>;
+}
+
+const { entry } = Astro.props;
+const { title, type, status, dimensions, materials, tags, started, completed, heroImage, gallery } =
+	entry.data;
+
+const formatDate = (date: Date) =>
+	date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<BaseLayout title={title}>
+	<div class="container">
+		<a class="back-link" href={import.meta.env.BASE_URL}>&larr; Back to catalogue</a>
+
+		<header class="page-header">
+			<h1>{title}</h1>
+			<div class="detail-meta">
+				<TypeBadge type={type} />
+				<StatusBadge status={status} />
+			</div>
+		</header>
+
+		<PhotoGallery heroImage={heroImage} gallery={gallery} title={title} />
+
+		<dl class="detail-specs">
+			{dimensions && (
+				<div>
+					<dt>Dimensions</dt>
+					<dd>{dimensions}</dd>
+				</div>
+			)}
+			{materials.length > 0 && (
+				<div>
+					<dt>Materials</dt>
+					<dd>{materials.join(', ')}</dd>
+				</div>
+			)}
+			{started && (
+				<div>
+					<dt>Started</dt>
+					<dd>{formatDate(started)}</dd>
+				</div>
+			)}
+			{completed && (
+				<div>
+					<dt>Completed</dt>
+					<dd>{formatDate(completed)}</dd>
+				</div>
+			)}
+		</dl>
+
+		{tags.length > 0 && (
+			<ul class="tag-list" aria-label="Tags">
+				{tags.map((tag) => (
+					<li>{tag}</li>
+				))}
+			</ul>
+		)}
+
+		<article class="prose">
+			<slot />
+		</article>
+	</div>
+</BaseLayout>

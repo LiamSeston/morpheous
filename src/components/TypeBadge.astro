@@ -1,0 +1,17 @@
+---
+interface Props {
+	type: 'building' | 'scatter' | 'tile' | 'bridge' | 'other';
+}
+
+const { type } = Astro.props;
+
+const labels: Record<Props['type'], string> = {
+	building: 'Building',
+	scatter: 'Scatter',
+	tile: 'Tile',
+	bridge: 'Bridge',
+	other: 'Other',
+};
+---
+
+<span class={`badge badge--${type}`}>{labels[type]}</span>

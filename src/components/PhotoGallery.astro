@@ -1,0 +1,36 @@
+---
+interface Props {
+	heroImage?: string;
+	gallery?: string[];
+	title: string;
+}
+
+const { heroImage, gallery = [], title } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+function resolveImage(path: string) {
+	return `${base}${path.replace(/^\//, '')}`;
+}
+
+const heroSrc = heroImage ? resolveImage(heroImage) : null;
+const galleryImages = gallery.map(resolveImage);
+---
+
+{heroSrc && (
+	<div class="detail-hero">
+		<img src={heroSrc} alt={title} width="1200" height="675" />
+	</div>
+)}
+
+{
+	galleryImages.length > 0 && (
+		<section class="gallery">
+			<h2>Gallery</h2>
+			<div class="gallery-grid">
+				{galleryImages.map((src, index) => (
+					<img src={src} alt={`${title} photo ${index + 1}`} loading="lazy" width="400" height="300" />
+				))}
+			</div>
+		</section>
+	)
+}

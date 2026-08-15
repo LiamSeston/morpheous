@@ -1,17 +1,25 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FilterBar from '../components/FilterBar.astro';
+import TerrainGrid from '../components/TerrainGrid.astro';
+import { getCollection } from 'astro:content';
 
+const entries = (await getCollection('terrain')).sort((a, b) =>
+	a.data.title.localeCompare(b.data.title),
+);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Catalogue">
+	<div class="container">
+		<header class="page-header">
+			<h1>Terrain Catalogue</h1>
+			<p>
+				A catalogue of buildings, scatter, and board pieces for my custom Mordheim table. Filter by
+				type or build status to browse.
+			</p>
+		</header>
+
+		<FilterBar />
+		<TerrainGrid entries={entries} />
+	</div>
+</BaseLayout>
