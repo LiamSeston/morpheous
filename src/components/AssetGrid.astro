@@ -18,24 +18,28 @@ const { entries } = Astro.props;
 
 <script>
 	function setupFilters() {
-		const systemButtons = document.querySelectorAll<HTMLButtonElement>('[data-filter-system]');
-		const kindButtons = document.querySelectorAll<HTMLButtonElement>('[data-filter-kind]');
-		const cards = document.querySelectorAll<HTMLElement>('.asset-card');
+		const cards = Array.from(document.querySelectorAll<HTMLElement>('.asset-card'));
+		if (cards.length === 0) return;
 		const emptyState = document.getElementById('empty-state');
 
-		let activeSystem = 'all';
-		let activeKind = 'all';
+		// Each facet maps a set of controls (pills, and the catalog's system
+		// tiles) onto a data-attribute carried by every card.
+		const facets = [
+			{ name: 'system', attr: 'data-filter-system', prop: 'filterSystem', cardProp: 'system' },
+			{ name: 'kind', attr: 'data-filter-kind', prop: 'filterKind', cardProp: 'kind' },
+			{ name: 'scan', attr: 'data-filter-scan', prop: 'filterScan', cardProp: 'scan' },
+		];
+
+		const active: Record<string, string> = { system: 'all', kind: 'all', scan: 'all' };
 
 		function applyFilters() {
 			let visibleCount = 0;
 
 			cards.forEach((card) => {
-				const cardSystem = card.dataset.system;
-				const cardKind = card.dataset.kind;
-				const systemMatch = activeSystem === 'all' || cardSystem === activeSystem;
-				const kindMatch = activeKind === 'all' || cardKind === activeKind;
-				const visible = systemMatch && kindMatch;
-
+				const visible = facets.every(
+					(facet) =>
+						active[facet.name] === 'all' || card.dataset[facet.cardProp] === active[facet.name],
+				);
 				card.classList.toggle('is-hidden', !visible);
 				if (visible) visibleCount += 1;
 			});
@@ -43,23 +47,22 @@ const { entries } = Astro.props;
 			emptyState?.classList.toggle('is-hidden', visibleCount > 0);
 		}
 
-		function setActive(buttons: NodeListOf<HTMLButtonElement>, active: HTMLButtonElement) {
-			buttons.forEach((btn) => btn.classList.toggle('is-active', btn === active));
-		}
+		facets.forEach((facet) => {
+			const controls = Array.from(document.querySelectorAll<HTMLElement>(`[${facet.attr}]`));
 
-		systemButtons.forEach((button) => {
-			button.addEventListener('click', () => {
-				activeSystem = button.dataset.filterSystem ?? 'all';
-				setActive(systemButtons, button);
-				applyFilters();
-			});
-		});
+			controls.forEach((control) => {
+				control.addEventListener('click', () => {
+					const value = control.dataset[facet.prop] ?? 'all';
+					active[facet.name] = value;
 
-		kindButtons.forEach((button) => {
-			button.addEventListener('click', () => {
-				activeKind = button.dataset.filterKind ?? 'all';
-				setActive(kindButtons, button);
-				applyFilters();
+					// Sync by value, not identity, so a pill and its matching
+					// system tile stay highlighted together.
+					controls.forEach((other) =>
+						other.classList.toggle('is-active', (other.dataset[facet.prop] ?? 'all') === value),
+					);
+
+					applyFilters();
+				});
 			});
 		});
 	}

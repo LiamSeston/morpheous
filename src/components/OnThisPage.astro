@@ -1,0 +1,57 @@
+---
+// Sticky right-hand table of contents with scrollspy, for long-form pages
+// (About now; Build Log / Rules later). Hidden below 1080px.
+interface Heading {
+	id: string;
+	text: string;
+}
+
+interface Props {
+	headings: Heading[];
+}
+
+const { headings } = Astro.props;
+---
+
+<aside class="doc-toc">
+	<div class="toc-title">On This Page</div>
+	{headings.map((heading) => (
+		<a href={`#${heading.id}`}>{heading.text}</a>
+	))}
+</aside>
+
+<script>
+	function setupScrollspy() {
+		const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('.doc-toc a'));
+		if (links.length === 0) return;
+
+		const sections = links
+			.map((link) => {
+				const id = link.getAttribute('href')?.slice(1) ?? '';
+				const target = id ? document.getElementById(id) : null;
+				return target ? { link, target } : null;
+			})
+			.filter((item): item is { link: HTMLAnchorElement; target: HTMLElement } => item !== null);
+
+		if (sections.length === 0) return;
+
+		function spy() {
+			const threshold = window.scrollY + 110;
+			let current = sections[0];
+
+			sections.forEach((section) => {
+				if (section.target.getBoundingClientRect().top + window.scrollY <= threshold) {
+					current = section;
+				}
+			});
+
+			sections.forEach((section) => section.link.classList.toggle('active', section === current));
+		}
+
+		document.addEventListener('scroll', spy, { passive: true });
+		spy();
+	}
+
+	setupScrollspy();
+	document.addEventListener('astro:page-load', setupScrollspy);
+</script>

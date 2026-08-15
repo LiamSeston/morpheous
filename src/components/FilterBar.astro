@@ -9,6 +9,7 @@ const { entries } = Astro.props;
 
 const systems = [...new Set(entries.map((e) => e.data.system))].sort();
 const kinds = [...new Set(entries.map((e) => e.data.category.split('—')[0].trim()))].sort();
+const hasAnyScan = entries.some((e) => e.data.modelSrc);
 ---
 
 <div class="filter-bar">
@@ -35,4 +36,19 @@ const kinds = [...new Set(entries.map((e) => e.data.category.split('—')[0].tri
 			</button>
 		))}
 	</div>
+
+	{hasAnyScan && (
+		<div class="filter-group">
+			<span class="filter-label" id="filter-scan-label">Detail</span>
+			<button type="button" class="filter-btn is-active" data-filter-scan="all" aria-labelledby="filter-scan-label">
+				All
+			</button>
+			<button type="button" class="filter-btn" data-filter-scan="scan" aria-labelledby="filter-scan-label">
+				Has 3D scan
+			</button>
+			<button type="button" class="filter-btn" data-filter-scan="photo" aria-labelledby="filter-scan-label">
+				Photos only
+			</button>
+		</div>
+	)}
 </div>
