@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import AssetViewport from '../components/AssetViewport.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
 import StatusBadge from '../components/StatusBadge.astro';
+import Icon from '../components/Icon.astro';
 import { withBase } from '../lib/url';
 import type { CollectionEntry } from 'astro:content';
 
@@ -43,7 +44,7 @@ const [categoryRoot] = category.split('—').map((s) => s.trim());
 		<h1 class="page-title">{title}</h1>
 
 		<div class="tags">
-			<span class="tag system">{system}</span>
+			<span class="tag system"><Icon name="systemTag" size={12} /> {system}</span>
 			{tags.map((t: string) => <span class="tag">{t}</span>)}
 			{warpstoneTouched && <span class="tag warp">Warpstone-touched</span>}
 			<StatusBadge status={status} />

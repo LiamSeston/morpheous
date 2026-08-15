@@ -1,6 +1,7 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { withBase } from '../lib/url';
+import Icon from './Icon.astro';
 
 interface Props {
 	entry: CollectionEntry<'assets'>;
@@ -38,7 +39,7 @@ const imageSrc = photo ? (photo.startsWith('http') ? photo : withBase(base, phot
 	<div class="asset-body">
 		<div class="tag-row">
 			<span class="tag">{categoryRoot}</span>
-			<span class="tag system">{system}</span>
+			<span class="tag system"><Icon name="systemTag" size={11} /> {system}</span>
 			{warpstoneTouched && <span class="tag warp">Warpstone-touched</span>}
 		</div>
 		<h3>{title}</h3>

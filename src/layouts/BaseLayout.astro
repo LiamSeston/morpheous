@@ -2,6 +2,7 @@
 import '../styles/theme.css';
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import Seal from '../components/Seal.astro';
 import { withBase, stripBase } from '../lib/url';
 
 interface Props {
@@ -25,6 +26,9 @@ const currentPath = stripBase(base, Astro.url.pathname);
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={description} />
 		<link rel="icon" type="image/svg+xml" href={withBase(base, 'favicon.svg')} />
+		<link rel="icon" type="image/x-icon" href={withBase(base, 'favicon.ico')} sizes="16x16 32x32 48x48" />
+		<link rel="apple-touch-icon" sizes="180x180" href={withBase(base, 'apple-touch-icon.png')} />
+		<link rel="manifest" href={withBase(base, 'site.webmanifest')} />
 
 		<!--
 			Critical for avoiding a flash of the wrong theme: this reads
@@ -54,12 +58,7 @@ const currentPath = stripBase(base, Astro.url.pathname);
 	<body>
 		<header class="site-header">
 			<div class="brand">
-				<svg class="seal" viewBox="0 0 24 24" fill="none">
-					<path
-						d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"
-						fill="var(--accent-bright)"
-					></path>
-				</svg>
+				<Seal size={24} class="seal" />
 				<a href={withBase(base)} style="color:inherit;">Morpheous</a>
 			</div>
 			<nav class="site-nav" aria-label="Main">
@@ -89,6 +88,10 @@ const currentPath = stripBase(base, Astro.url.pathname);
 		<footer class="site-footer">
 			<div class="footer-brand">Morpheous</div>
 			<div>A fan-made modelling &amp; terrain catalog. Not affiliated with any publisher.</div>
+			<div class="footer-credit">
+				Terrain icon via <a href="https://game-icons.net" target="_blank" rel="noopener noreferrer">game-icons.net</a>
+				(CC BY 3.0)
+			</div>
 		</footer>
 	</body>
 </html>

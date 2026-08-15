@@ -1,0 +1,36 @@
+---
+// src/components/Seal.astro
+// The site's brand mark — Blackletter Initial: an "M" in Pirata One inside a
+// plain circle. Chosen over rune/sigil directions because it stays neutral
+// across Mordheim/40k/Necromunda content rather than reading as
+// Old-World-specific. One of the four places Pirata One is allowed to
+// appear (see TYPOGRAPHY.md).
+//
+// This is the on-page mark (nav wordmark spot, hero) — it relies on the
+// Pirata One webfont already loaded site-wide in BaseLayout's <head>, which
+// is reliable in normal page rendering. It is NOT used for the favicon:
+// browsers frequently fail to load @font-face in the more restricted
+// favicon rendering context, so public/favicon.svg instead bakes the same
+// glyph in as a real vector path. See FAVICON.md.
+//
+// Usage: <Seal size={24} class="seal" /> — color comes from the parent's
+// `color` (currentColor), same convention as Icon.astro.
+
+interface Props {
+  size?: number;
+  class?: string;
+}
+const { size = 24, class: className = '' } = Astro.props;
+---
+
+<svg width={size} height={size} viewBox="0 0 24 24" class={`seal-mark ${className}`} aria-hidden="true">
+  <circle cx="12" cy="12" r="9.3" fill="none" stroke="currentColor" stroke-width="1.4" />
+  <text x="12" y="16.6" text-anchor="middle" fill="currentColor">M</text>
+</svg>
+
+<style>
+  .seal-mark text {
+    font-family: var(--font-display);
+    font-size: 13px;
+  }
+</style>
