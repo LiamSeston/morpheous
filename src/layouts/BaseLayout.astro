@@ -2,6 +2,7 @@
 import '../styles/theme.css';
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import { withBase, stripBase } from '../lib/url';
 
 interface Props {
 	title: string;
@@ -13,7 +14,8 @@ const {
 	description = 'A modelling & terrain catalog spanning Mordheim, Necromunda, 40k, and whatever comes next.',
 } = Astro.props;
 const fullTitle = title === 'Morpheous' ? 'Morpheous' : `${title} · Morpheous`;
-const currentPath = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/');
+const base = import.meta.env.BASE_URL;
+const currentPath = stripBase(base, Astro.url.pathname);
 ---
 
 <!doctype html>
@@ -22,7 +24,7 @@ const currentPath = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/');
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={description} />
-		<link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
+		<link rel="icon" type="image/svg+xml" href={withBase(base, 'favicon.svg')} />
 
 		<!--
 			Critical for avoiding a flash of the wrong theme: this reads
@@ -58,20 +60,20 @@ const currentPath = Astro.url.pathname.replace(import.meta.env.BASE_URL, '/');
 						fill="var(--accent-bright)"
 					></path>
 				</svg>
-				<a href={import.meta.env.BASE_URL} style="color:inherit;">Morpheous</a>
+				<a href={withBase(base)} style="color:inherit;">Morpheous</a>
 			</div>
 			<nav class="site-nav" aria-label="Main">
-				<a href={import.meta.env.BASE_URL} aria-current={currentPath === '/' ? 'page' : undefined}>
+				<a href={withBase(base)} aria-current={currentPath === '/' ? 'page' : undefined}>
 					Home
 				</a>
 				<a
-					href={`${import.meta.env.BASE_URL}catalog/`}
+					href={withBase(base, 'catalog/')}
 					aria-current={currentPath.startsWith('/catalog') ? 'page' : undefined}
 				>
 					Catalog
 				</a>
 				<a
-					href={`${import.meta.env.BASE_URL}about/`}
+					href={withBase(base, 'about/')}
 					aria-current={currentPath.startsWith('/about') ? 'page' : undefined}
 				>
 					About

@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import AssetViewport from '../components/AssetViewport.astro';
 import PhotoGallery from '../components/PhotoGallery.astro';
 import StatusBadge from '../components/StatusBadge.astro';
+import { withBase } from '../lib/url';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -28,7 +29,7 @@ const {
 
 const base = import.meta.env.BASE_URL;
 const resolvePoster = (path?: string) =>
-	path ? (path.startsWith('http') ? path : `${base}${path.replace(/^\//, '')}`) : undefined;
+	path ? (path.startsWith('http') ? path : withBase(base, path)) : undefined;
 
 const [categoryRoot] = category.split('—').map((s) => s.trim());
 ---
@@ -36,7 +37,7 @@ const [categoryRoot] = category.split('—').map((s) => s.trim());
 <BaseLayout title={title} description={`${title} — ${category} for ${system}.`}>
 	<div class="container wrap">
 		<div class="crumb">
-			<a href={`${base}catalog/`}>Catalog</a> / {categoryRoot} / {title}
+			<a href={withBase(base, 'catalog/')}>Catalog</a> / {categoryRoot} / {title}
 		</div>
 
 		<h1 class="page-title">{title}</h1>
