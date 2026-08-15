@@ -6,6 +6,8 @@
 //   poster="/images/watchtower-poster.jpg"
 //   alt="Ruined Watchtower terrain piece"
 // />
+import Icon from './Icon.astro';
+
 interface Props {
   src: string;
   poster?: string;
@@ -32,8 +34,8 @@ const { src, poster, alt } = Astro.props;
   ></model-viewer>
 
   <div class="viewport-toolbar">
-    <button class="vt-btn active" id="autorotateBtn">⟳ Auto-rotate</button>
-    <button class="vt-btn" id="resetBtn">↺ Reset view</button>
+    <button class="vt-btn active" id="autorotateBtn"><Icon name="autoRotate" size={14} /> Auto-rotate</button>
+    <button class="vt-btn" id="resetBtn"><Icon name="resetView" size={14} /> Reset view</button>
   </div>
 </div>
 
