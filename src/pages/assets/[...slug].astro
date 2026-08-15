@@ -1,9 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
-import TerrainDetail from '../../layouts/TerrainDetail.astro';
+import AssetDetail from '../../layouts/AssetDetail.astro';
 
 export async function getStaticPaths() {
-	const entries = await getCollection('terrain');
+	const entries = await getCollection('assets');
 	return entries.map((entry) => ({
 		params: { slug: entry.id },
 		props: { entry },
@@ -14,6 +14,6 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 ---
 
-<TerrainDetail entry={entry}>
+<AssetDetail entry={entry}>
 	<Content />
-</TerrainDetail>
+</AssetDetail>

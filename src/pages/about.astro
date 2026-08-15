@@ -10,13 +10,15 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 		<article class="prose">
 			<p>
-				This site catalogues terrain for a custom Mordheim board — ruined buildings, scatter
-				terrain, and modular tiles built for skirmish wargaming in the City of the Damned.
+				Morpheous is a living catalog of everything built on the tabletop — Mordheim terrain and
+				warbands, Necromunda gangs, 40k miniatures, and whatever comes next — organized by what
+				each piece actually is rather than which game it's from.
 			</p>
 			<p>
-				Each entry tracks build status, dimensions, materials, and work-in-progress photos. Add a
-				new markdown file in <code>src/content/terrain/</code> and drop photos into
-				<code>public/images/terrain/</code> to catalogue your next piece.
+				Each entry tracks build status, materials, dimensions, and paint notes, with optional
+				rotatable 3D scans for pieces that have been Blender-scanned. Add a new markdown file in
+				<code>src/content/assets/</code> and drop photos into
+				<code>public/images/</code> to catalogue your next piece.
 			</p>
 		</article>
 	</div>
@@ -26,8 +28,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 	code {
 		font-size: 0.9em;
 		padding: 0.15em 0.4em;
-		background: var(--bg-elevated);
-		border: 1px solid var(--border);
+		background: var(--surface);
+		border: 1px solid var(--line);
 		border-radius: 0.25rem;
 	}
 </style>

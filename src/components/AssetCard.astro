@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	entry: CollectionEntry<'assets'>;
+}
+
+const { entry } = Astro.props;
+const { title, system, category, materials, footprint, warpstoneTouched, images } = entry.data;
+const [categoryRoot] = category.split('—').map((s) => s.trim());
+const href = `${import.meta.env.BASE_URL}assets/${entry.id}/`;
+
+const gradients = [
+	'linear-gradient(155deg,var(--model-a),var(--model-c))',
+	'linear-gradient(155deg,var(--model-b),var(--model-d))',
+	'linear-gradient(155deg,var(--model-c),var(--model-a))',
+	'linear-gradient(155deg,var(--model-d),var(--model-b))',
+];
+const gradient = gradients[title.length % gradients.length];
+
+const photo = images[0];
+const imageSrc = photo
+	? photo.startsWith('http')
+		? photo
+		: `${import.meta.env.BASE_URL}${photo.replace(/^\//, '')}`
+	: null;
+---
+
+<a class="asset-card" href={href} data-system={system} data-kind={categoryRoot}>
+	<div class="asset-thumb" style={imageSrc ? undefined : `background:${gradient}`}>
+		{imageSrc && <img src={imageSrc} alt={title} loading="lazy" width="400" height="300" />}
+	</div>
+	<div class="asset-body">
+		<div class="tag-row">
+			<span class="tag">{categoryRoot}</span>
+			<span class="tag system">{system}</span>
+			{warpstoneTouched && <span class="tag warp">Warpstone-touched</span>}
+		</div>
+		<h3>{title}</h3>
+		<p>{[materials.slice(0, 2).join(' + '), footprint].filter(Boolean).join(' — ')}</p>
+	</div>
+</a>

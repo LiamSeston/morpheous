@@ -1,17 +1,20 @@
 ---
 title: Corner Cobblestone Tile
-type: tile
+system: Mordheim
+category: "Terrain — Tile"
 status: planned
-dimensions: "12×12 in"
+footprint: "12×12 in"
 materials:
   - MDF
   - cork
   - sand
 tags:
-  - tile
-  - modular
-  - cobblestone
-heroImage: /images/terrain/corner-tile/hero.svg
+  - Terrain
+  - Modular
+  - Cobblestone
+warpstoneTouched: false
+images:
+  - /images/terrain/corner-tile/hero.svg
 ---
 
 ## Build Notes

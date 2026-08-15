@@ -2,20 +2,27 @@ import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
-const terrain = defineCollection({
-	loader: glob({ base: './src/content/terrain', pattern: '**/*.md' }),
+const assets = defineCollection({
+	loader: glob({ base: './src/content/assets', pattern: '**/*.md' }),
 	schema: z.object({
 		title: z.string(),
-		type: z.enum(['building', 'scatter', 'tile', 'bridge', 'other']),
-		status: z.enum(['planned', 'in-progress', 'complete']),
-		dimensions: z.string().optional(),
-		materials: z.array(z.string()).default([]),
+		system: z.enum(['Mordheim', 'Necromunda', 'Warhammer 40k', 'Other']),
+		category: z.string(), // "Terrain — Tower", "Warband — Hero", etc.
 		tags: z.array(z.string()).default([]),
-		started: z.coerce.date().optional(),
-		completed: z.coerce.date().optional(),
-		heroImage: z.string().optional(),
-		gallery: z.array(z.string()).default([]),
+		materials: z.array(z.string()).default([]),
+		footprint: z.string().optional(), // "15 × 15 cm"
+		height: z.string().optional(), // "22 cm"
+		status: z.enum(['planned', 'in-progress', 'complete']).default('complete'),
+		builtDate: z.coerce.date().optional(),
+		warpstoneTouched: z.boolean().default(false),
+
+		// 3D model — hosted via jsDelivr CDN pointing at this same repo
+		modelSrc: z.string().optional(), // full jsDelivr URL to the .glb
+		modelPoster: z.string().optional(), // fallback image while the model loads
+
+		// Fallback photos for assets without a 3D scan yet
+		images: z.array(z.string()).default([]),
 	}),
 });
 
-export const collections = { terrain };
+export const collections = { assets };

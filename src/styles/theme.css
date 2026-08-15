@@ -1,0 +1,84 @@
+/* src/styles/theme.css
+   Design tokens only — imported once in src/layouts/BaseLayout.astro.
+   Every other stylesheet/component should reference these variables,
+   never a hardcoded hex. Shared page chrome (topbar, hero, cards, tags,
+   meta-card, filter-bar, etc.) lives in global.css, built on top of these.
+*/
+
+/* ---------- Light: Bone & Brass (default) ---------- */
+:root {
+  --ink:#171310;
+  --page-bg:#EDE4D0;
+  --surface:#F5EFDF;
+  --line:#D9CBA9;
+  --text:#171310;
+  --text-dim:#4A4038;
+  --accent:#9C7A34;
+  --accent-bright:#B4903F;
+  --accent-wash: rgba(156,122,52,0.10);
+
+  /* Glow is dark-mode exclusive — stays fully transparent here on purpose */
+  --glow: rgba(156,122,52,0);
+  --glow-active: rgba(0,0,0,0);
+
+  --model-a:#C9B98A; --model-b:#A6926B; --model-c:#8E7B57; --model-d:#7C6A48;
+
+  --radius: 2px;
+  color-scheme: light;
+}
+
+/* ---------- Dark: Verdigris & Warpstone ---------- */
+:root[data-theme="dark"] {
+  --ink:#E7E1D2;
+  --page-bg:#0B0E0C;
+  --surface:#141814;
+  --line:#293029;
+  --text:#E7E1D2;
+  --text-dim:#A6A296;
+  --accent:#4C7A6B;
+  --accent-bright:#69A38F;
+  --accent-wash: rgba(76,122,107,0.12);
+
+  --warpstone:#7FE3A0;
+  --warpstone-soft: rgba(127,227,160,0.55);
+  --warpstone-mid: rgba(127,227,160,0.32);
+  --warpstone-far: rgba(127,227,160,0.16);
+  --glow: rgba(127,227,160,0);
+  --glow-active: var(--warpstone-mid);
+
+  --model-a:#5C6E60; --model-b:#4E5E52; --model-c:#3E4A40; --model-d:#333E36;
+
+  color-scheme: dark;
+}
+
+/* ---------- Fonts ----------
+   <head> also needs, once:
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+*/
+:root {
+  --font-display: 'Pirata One', serif;   /* hero titles / logo only — sparing use */
+  --font-heading: 'Cinzel', serif;       /* h2/h3, rubric-style section labels */
+  --font-body: 'EB Garamond', serif;     /* body copy — the "tame" read */
+  --font-ui: 'Inter', sans-serif;        /* nav, buttons, meta labels */
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 15% -10%, var(--accent-wash), transparent 60%),
+    var(--page-bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .35s ease, color .35s ease;
+}
+a { color: inherit; text-decoration: none; }
+::selection { background: var(--accent); color: var(--page-bg); }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

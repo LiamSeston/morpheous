@@ -1,25 +1,131 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import FilterBar from '../components/FilterBar.astro';
-import TerrainGrid from '../components/TerrainGrid.astro';
 import { getCollection } from 'astro:content';
 
-const entries = (await getCollection('terrain')).sort((a, b) =>
-	a.data.title.localeCompare(b.data.title),
-);
+const base = import.meta.env.BASE_URL;
+
+const allAssets = await getCollection('assets');
+const recent = allAssets
+	.slice()
+	.sort((a, b) => {
+		const da = a.data.builtDate?.getTime() ?? 0;
+		const db = b.data.builtDate?.getTime() ?? 0;
+		return db - da;
+	})
+	.slice(0, 3);
+
+const thumbGradients = [
+	'linear-gradient(155deg,var(--model-a),var(--model-c))',
+	'linear-gradient(155deg,var(--model-b),var(--model-d))',
+	'linear-gradient(155deg,var(--model-c),var(--model-a))',
+];
+
+function resolveImage(path: string) {
+	return path.startsWith('http') ? path : `${base}${path.replace(/^\//, '')}`;
+}
 ---
 
-<BaseLayout title="Catalogue">
-	<div class="container">
-		<header class="page-header">
-			<h1>Terrain Catalogue</h1>
-			<p>
-				A catalogue of buildings, scatter, and board pieces for my custom Mordheim table. Filter by
-				type or build status to browse.
-			</p>
-		</header>
+<BaseLayout title="Morpheous">
+	<section class="hero">
+		<div class="kicker">A Modelling &amp; Terrain Catalog</div>
+		<svg class="seal-lg" viewBox="0 0 24 24" fill="none">
+			<path
+				d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"
+				fill="var(--accent-bright)"
+			></path>
+		</svg>
+		<h1 class="hero-title">Morpheous</h1>
+		<p class="hero-dek">
+			A living record of everything I build on the tabletop — Mordheim terrain and warbands,
+			Necromunda gangs, 40k miniatures, and whatever comes next — with paint notes and rotatable
+			3D scans along the way.
+		</p>
+		<div class="hero-actions">
+			<a href={`${base}catalog/`} class="btn btn-primary">Browse the Catalog</a>
+			<a href={`${base}about/`} class="btn btn-ghost">About This Project</a>
+		</div>
+	</section>
 
-		<FilterBar />
-		<TerrainGrid entries={entries} />
+	<div class="divider">
+		<svg viewBox="0 0 24 24" fill="currentColor">
+			<path d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"></path>
+		</svg>
 	</div>
+
+	<section class="intent">
+		<h2 class="section-label">Why This Site Exists</h2>
+		<p class="lede">
+			Every scratch-built ruin, hand-painted gang member, and half-finished 40k project used to
+			live nowhere but a phone camera roll. This site is the fix — one permanent, browsable record
+			spanning every system I build for, sorted by what it actually is rather than which game it's
+			from. It's part build-log, part reference sheet, part excuse to keep making more of it.
+		</p>
+	</section>
+
+	<section class="features">
+		<h2 class="section-label">What You'll Find Here</h2>
+		<div class="feature-grid">
+			<div class="feature-card">
+				<svg class="ficon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+					<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"></path>
+				</svg>
+				<h3>Terrain Catalog</h3>
+				<p>
+					Every scratch-built ruin, tower, and rubble pile — with materials, dimensions, and the
+					build notes behind each one.
+				</p>
+			</div>
+			<div class="feature-card">
+				<svg class="ficon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+					<path d="M12 2 21 7 21 17 12 22 3 17 3 7 12 2Z"></path>
+					<path d="M3 7l9 5 9-5M12 12v10"></path>
+				</svg>
+				<h3>Live 3D Viewports</h3>
+				<p>Rotatable scans you can inspect right in the browser, instead of a single static photo.</p>
+				<span class="hint">Warpstone-touched pieces glow when you drag them, in dark mode</span>
+			</div>
+			<div class="feature-card">
+				<svg class="ficon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+					<path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+					<path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+				</svg>
+				<h3>Build Logs</h3>
+				<p>Paint recipes, basing techniques, and the materials and notes behind every piece.</p>
+			</div>
+		</div>
+	</section>
+
+	<section class="preview">
+		<div class="preview-head">
+			<h2 class="section-label" style="margin:0;text-align:left;">Recently Added</h2>
+			<a href={`${base}catalog/`} class="preview-link">View full catalog →</a>
+		</div>
+		{recent.length > 0 ? (
+			<div class="card-grid">
+				{recent.map((entry, i) => {
+					const { title, system, category, materials, footprint, warpstoneTouched, images } = entry.data;
+					const [categoryRoot] = category.split('—').map((s: string) => s.trim());
+					const photo = images[0];
+					return (
+						<a class="asset-card" href={`${base}assets/${entry.id}/`}>
+							<div class="asset-thumb" style={photo ? undefined : `background:${thumbGradients[i % thumbGradients.length]}`}>
+								{photo && <img src={resolveImage(photo)} alt={title} loading="lazy" />}
+							</div>
+							<div class="asset-body">
+								<div class="tag-row">
+									<span class="tag">{categoryRoot}</span>
+									<span class="tag system">{system}</span>
+									{warpstoneTouched && <span class="tag warp">Warpstone-touched</span>}
+								</div>
+								<h3>{title}</h3>
+								<p>{[materials.slice(0, 2).join(' + '), footprint].filter(Boolean).join(' — ')}</p>
+							</div>
+						</a>
+					);
+				})}
+			</div>
+		) : (
+			<p><em>No pieces catalogued yet.</em></p>
+		)}
+	</section>
 </BaseLayout>
