@@ -2,7 +2,6 @@
 import '../styles/theme.css';
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
-import Seal from '../components/Seal.astro';
 import { withBase, stripBase } from '../lib/url';
 
 interface Props {
@@ -58,7 +57,12 @@ const currentPath = stripBase(base, Astro.url.pathname);
 	<body>
 		<header class="site-header">
 			<div class="brand">
-				<Seal size={24} class="seal" />
+				<svg class="seal" viewBox="0 0 24 24" fill="none">
+					<path
+						d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"
+						fill="var(--accent-bright)"
+					></path>
+				</svg>
 				<a href={withBase(base)} style="color:inherit;">Morpheous</a>
 			</div>
 			<nav class="site-nav" aria-label="Main">
@@ -88,10 +92,6 @@ const currentPath = stripBase(base, Astro.url.pathname);
 		<footer class="site-footer">
 			<div class="footer-brand">Morpheous</div>
 			<div>A fan-made modelling &amp; terrain catalog. Not affiliated with any publisher.</div>
-			<div class="footer-credit">
-				Terrain icon via <a href="https://game-icons.net" target="_blank" rel="noopener noreferrer">game-icons.net</a>
-				(CC BY 3.0)
-			</div>
 		</footer>
 	</body>
 </html>

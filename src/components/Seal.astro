@@ -6,15 +6,16 @@
 // Old-World-specific. One of the four places Pirata One is allowed to
 // appear (see TYPOGRAPHY.md).
 //
-// This is the on-page mark (nav wordmark spot, hero) — it relies on the
-// Pirata One webfont already loaded site-wide in BaseLayout's <head>, which
-// is reliable in normal page rendering. It is NOT used for the favicon:
-// browsers frequently fail to load @font-face in the more restricted
-// favicon rendering context, so public/favicon.svg instead bakes the same
-// glyph in as a real vector path. See FAVICON.md.
+// This is the on-page mark — used as the center ornament in `.divider`
+// rules (landing + about pages). It relies on the Pirata One webfont
+// already loaded site-wide in BaseLayout's <head>, which is reliable in
+// normal page rendering. It is NOT used for the favicon: browsers
+// frequently fail to load @font-face in the more restricted favicon
+// rendering context, so public/favicon.svg instead bakes the same glyph in
+// as a real vector path. See FAVICON.md.
 //
-// Usage: <Seal size={24} class="seal" /> — color comes from the parent's
-// `color` (currentColor), same convention as Icon.astro.
+// Usage: <Seal size={16} /> inside a `.divider` — color comes from the
+// parent's `color` (currentColor).
 
 interface Props {
   size?: number;

@@ -1,5 +1,4 @@
 ---
-import Icon from './Icon.astro';
 import type { CollectionEntry } from 'astro:content';
 
 interface Props {
@@ -44,8 +43,8 @@ const hasAnyScan = entries.some((e) => e.data.modelSrc);
 			<button type="button" class="filter-btn is-active" data-filter-scan="all" aria-labelledby="filter-scan-label">
 				All
 			</button>
-			<button type="button" class="filter-btn filter-btn--icon" data-filter-scan="scan" aria-labelledby="filter-scan-label">
-				<Icon name="file3d" size={13} /> Has 3D scan
+			<button type="button" class="filter-btn" data-filter-scan="scan" aria-labelledby="filter-scan-label">
+				Has 3D scan
 			</button>
 			<button type="button" class="filter-btn" data-filter-scan="photo" aria-labelledby="filter-scan-label">
 				Photos only
