@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getCollection } from 'astro:content';
+import { withBase } from '../lib/url';
 
 const base = import.meta.env.BASE_URL;
 
@@ -21,7 +22,7 @@ const thumbGradients = [
 ];
 
 function resolveImage(path: string) {
-	return path.startsWith('http') ? path : `${base}${path.replace(/^\//, '')}`;
+	return path.startsWith('http') ? path : withBase(base, path);
 }
 ---
 
@@ -41,8 +42,8 @@ function resolveImage(path: string) {
 			3D scans along the way.
 		</p>
 		<div class="hero-actions">
-			<a href={`${base}catalog/`} class="btn btn-primary">Browse the Catalog</a>
-			<a href={`${base}about/`} class="btn btn-ghost">About This Project</a>
+			<a href={withBase(base, 'catalog/')} class="btn btn-primary">Browse the Catalog</a>
+			<a href={withBase(base, 'about/')} class="btn btn-ghost">About This Project</a>
 		</div>
 	</section>
 
@@ -98,7 +99,7 @@ function resolveImage(path: string) {
 	<section class="preview">
 		<div class="preview-head">
 			<h2 class="section-label" style="margin:0;text-align:left;">Recently Added</h2>
-			<a href={`${base}catalog/`} class="preview-link">View full catalog →</a>
+			<a href={withBase(base, 'catalog/')} class="preview-link">View full catalog →</a>
 		</div>
 		{recent.length > 0 ? (
 			<div class="card-grid">
@@ -107,7 +108,7 @@ function resolveImage(path: string) {
 					const [categoryRoot] = category.split('—').map((s: string) => s.trim());
 					const photo = images[0];
 					return (
-						<a class="asset-card" href={`${base}assets/${entry.id}/`}>
+						<a class="asset-card" href={withBase(base, `assets/${entry.id}/`)}>
 							<div class="asset-thumb" style={photo ? undefined : `background:${thumbGradients[i % thumbGradients.length]}`}>
 								{photo && <img src={resolveImage(photo)} alt={title} loading="lazy" />}
 							</div>

@@ -4,6 +4,7 @@ import FilterBar from '../components/FilterBar.astro';
 import AssetGrid from '../components/AssetGrid.astro';
 import { getCollection } from 'astro:content';
 import { SYSTEMS, SYSTEM_BLURBS } from '../lib/systems';
+import { withBase } from '../lib/url';
 
 const base = import.meta.env.BASE_URL;
 
@@ -91,7 +92,7 @@ const coverage = SYSTEMS.map((system) => ({
 
 		<div class="callout">
 			<b>Adding a piece —</b> each entry in this catalog is a single markdown file. The
-			<a class="inline-link" href={`${base}about/#documenting`}>field reference on the About page</a>
+			<a class="inline-link" href={`${withBase(base, 'about/')}#documenting`}>field reference on the About page</a>
 			lists every frontmatter key, which are required, and what each one drives on the page.
 		</div>
 	</div>

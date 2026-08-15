@@ -1,5 +1,6 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { withBase } from '../lib/url';
 
 interface Props {
 	entry: CollectionEntry<'assets'>;
@@ -9,7 +10,8 @@ const { entry } = Astro.props;
 const { title, system, category, materials, footprint, warpstoneTouched, images, modelSrc } =
 	entry.data;
 const [categoryRoot] = category.split('—').map((s) => s.trim());
-const href = `${import.meta.env.BASE_URL}assets/${entry.id}/`;
+const base = import.meta.env.BASE_URL;
+const href = withBase(base, `assets/${entry.id}/`);
 
 const gradients = [
 	'linear-gradient(155deg,var(--model-a),var(--model-c))',
@@ -20,11 +22,7 @@ const gradients = [
 const gradient = gradients[title.length % gradients.length];
 
 const photo = images[0];
-const imageSrc = photo
-	? photo.startsWith('http')
-		? photo
-		: `${import.meta.env.BASE_URL}${photo.replace(/^\//, '')}`
-	: null;
+const imageSrc = photo ? (photo.startsWith('http') ? photo : withBase(base, photo)) : null;
 ---
 
 <a

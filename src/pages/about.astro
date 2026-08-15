@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import OnThisPage from '../components/OnThisPage.astro';
 import { getCollection } from 'astro:content';
 import { SYSTEMS, SYSTEM_BLURBS } from '../lib/systems';
+import { withBase } from '../lib/url';
 
 const base = import.meta.env.BASE_URL;
 const entries = await getCollection('assets');
@@ -286,7 +287,7 @@ const fields = [
 					</div>
 
 					<p>
-						Ready to look at some models? <a class="inline-link" href={`${base}catalog/`}>Browse the catalog →</a>
+						Ready to look at some models? <a class="inline-link" href={withBase(base, 'catalog/')}>Browse the catalog →</a>
 					</p>
 				</article>
 			</div>
