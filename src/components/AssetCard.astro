@@ -6,7 +6,8 @@ interface Props {
 }
 
 const { entry } = Astro.props;
-const { title, system, category, materials, footprint, warpstoneTouched, images } = entry.data;
+const { title, system, category, materials, footprint, warpstoneTouched, images, modelSrc } =
+	entry.data;
 const [categoryRoot] = category.split('—').map((s) => s.trim());
 const href = `${import.meta.env.BASE_URL}assets/${entry.id}/`;
 
@@ -26,7 +27,13 @@ const imageSrc = photo
 	: null;
 ---
 
-<a class="asset-card" href={href} data-system={system} data-kind={categoryRoot}>
+<a
+	class="asset-card"
+	href={href}
+	data-system={system}
+	data-kind={categoryRoot}
+	data-scan={modelSrc ? 'scan' : 'photo'}
+>
 	<div class="asset-thumb" style={imageSrc ? undefined : `background:${gradient}`}>
 		{imageSrc && <img src={imageSrc} alt={title} loading="lazy" width="400" height="300" />}
 	</div>

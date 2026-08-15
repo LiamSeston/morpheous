@@ -1,35 +1,323 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import OnThisPage from '../components/OnThisPage.astro';
+import { getCollection } from 'astro:content';
+import { SYSTEMS, SYSTEM_BLURBS } from '../lib/systems';
+
+const base = import.meta.env.BASE_URL;
+const entries = await getCollection('assets');
+
+const scope = SYSTEMS.map((system) => ({
+	system,
+	blurb: SYSTEM_BLURBS[system],
+	count: entries.filter((e) => e.data.system === system).length,
+}));
+
+const headings = [
+	{ id: 'short-version', text: 'The Short Version' },
+	{ id: 'scope', text: 'What Gets Catalogued' },
+	{ id: 'documenting', text: 'How a Piece Is Documented' },
+	{ id: 'materials', text: 'Materials & Methods' },
+	{ id: 'scans', text: 'The 3D Scans' },
+	{ id: 'colophon', text: 'Colophon' },
+];
+
+// The live schema, described for whoever is writing the next entry.
+const fields = [
+	{ key: 'title', req: true, example: '"Ruined Watchtower"', note: 'Page heading and card title.' },
+	{ key: 'system', req: true, example: 'Mordheim', note: 'One of the four in src/lib/systems.ts. Drives the System facet.' },
+	{ key: 'category', req: true, example: '"Terrain — Tower"', note: 'Text before the em dash becomes the Type facet.' },
+	{ key: 'status', req: false, example: 'complete', note: 'planned · in-progress · complete. Defaults to complete.' },
+	{ key: 'tags', req: false, example: '["Scratch-build"]', note: 'Free-form. Shown as pills under the title.' },
+	{ key: 'materials', req: false, example: '["Foamboard", "MDF"]', note: 'First two also summarise the card.' },
+	{ key: 'footprint', req: false, example: '"15 × 15 cm"', note: 'Base dimensions.' },
+	{ key: 'height', req: false, example: '"22 cm"', note: 'Useful for true line-of-sight.' },
+	{ key: 'builtDate', req: false, example: '2026-03-01', note: 'Renders as month + year. Newest three reach the homepage.' },
+	{ key: 'warpstoneTouched', req: false, example: 'true', note: 'Adds the dark-mode-only glow tag. Mordheim pieces only.' },
+	{ key: 'modelSrc', req: false, example: 'https://cdn.jsdelivr.net/…', note: 'jsDelivr URL to the .glb. Replaces photos with the 3D viewport.' },
+	{ key: 'modelPoster', req: false, example: '/images/…/poster.jpg', note: 'Still shown while the model loads.' },
+	{ key: 'images', req: false, example: '["/images/…/hero.svg"]', note: 'Fallback when there is no scan. First is the hero.' },
+];
 ---
 
-<BaseLayout title="About">
-	<div class="container">
-		<header class="page-header">
-			<h1>About This Project</h1>
-		</header>
+<BaseLayout
+	title="About"
+	description="Who's behind the bench, what earns a place in the catalog, and how each piece gets documented."
+>
+	<div class="container about-wrap">
+		<div class="doc-shell">
+			<div>
+				<header class="page-header">
+					<h1>About <span class="rubric-mark">Morpheous</span></h1>
+					<p class="dek">
+						Who's behind the bench, what earns a place in the catalog, and how a finished piece
+						gets from primer to permanent record.
+					</p>
+				</header>
 
-		<article class="prose">
-			<p>
-				Morpheous is a living catalog of everything built on the tabletop — Mordheim terrain and
-				warbands, Necromunda gangs, 40k miniatures, and whatever comes next — organized by what
-				each piece actually is rather than which game it's from.
-			</p>
-			<p>
-				Each entry tracks build status, materials, dimensions, and paint notes, with optional
-				rotatable 3D scans for pieces that have been Blender-scanned. Add a new markdown file in
-				<code>src/content/assets/</code> and drop photos into
-				<code>public/images/</code> to catalogue your next piece.
-			</p>
-		</article>
+				<div class="divider" style="margin:24px 0 30px;padding:0;">
+					<svg viewBox="0 0 24 24" fill="currentColor">
+						<path d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"></path>
+					</svg>
+				</div>
+
+				<article class="prose">
+					<p class="lede">
+						This site began as a folder of photographs named <code>IMG_4417</code> and a memory
+						that reliably failed about six months after any given piece left the workbench.
+						Morpheous is the correction — one permanent, browsable record of everything built for
+						the table, across every system, carrying the recipes and dimensions that otherwise
+						vanish the moment the varnish dries.
+					</p>
+
+					<div class="skel-note">
+						<span class="skel-label">Skeleton — this whole page</span>
+						<p>
+							Every section below is scaffolding: real structure, real styling, placeholder words.
+							Rewrite the prose in your own voice and delete these dashed notes as you go. The
+							tables that describe the site's actual behaviour are accurate — those you can keep.
+						</p>
+					</div>
+
+					<h2 id="short-version"><span class="num">01</span>The Short Version</h2>
+					<p class="placeholder">
+						Two or three sentences on who you are and how you got here — when you started building,
+						what pulled you in, and what you are usually doing when you are not gluing something.
+						This is the paragraph people read first, so it is worth writing last.
+					</p>
+
+					<div class="table-scroll">
+						<table class="spec-table">
+							<tbody>
+								<tr><td style="width:38%"><b>Building since</b></td><td class="placeholder">Year you picked up your first kit</td></tr>
+								<tr><td><b>Mainly builds</b></td><td class="placeholder">Terrain · miniatures · both</td></tr>
+								<tr><td><b>Scale</b></td><td class="placeholder">28mm heroic, mostly</td></tr>
+								<tr><td><b>Preferred medium</b></td><td class="placeholder">XPS foam, plasticard, bits-box scavenging</td></tr>
+								<tr><td><b>Currently on the bench</b></td><td class="placeholder">Whatever is half-primed right now</td></tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="skel-note">
+						<span class="skel-label">To write</span>
+						<p>
+							Swap the right-hand column for real answers, or drop rows you do not care about. A
+							short factual table like this does a lot of work that prose would otherwise have to.
+						</p>
+					</div>
+
+					<h2 id="scope"><span class="num">02</span>What Gets Catalogued</h2>
+					<p>
+						The catalog is deliberately one collection rather than a set of per-game sections. A
+						piece is filed by what it <em>is</em> — terrain, miniature, tile — and tagged with the
+						system it was built for, so browsing by either works without maintaining separate
+						sites for each game.
+					</p>
+
+					<div class="table-scroll">
+						<table class="spec-table">
+							<thead>
+								<tr><th>System</th><th>What lives here</th><th>Catalogued</th></tr>
+							</thead>
+							<tbody>
+								{scope.map((row) => (
+									<tr>
+										<td><b>{row.system}</b></td>
+										<td>{row.blurb}</td>
+										<td>{row.count > 0 ? `${row.count} piece${row.count === 1 ? '' : 's'}` : '—'}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+
+					<p>
+						Anything that took work and might be worth looking at again earns an entry — including
+						pieces that are still boxes of cut foam. A <code>status</code> of
+						<code>planned</code> or <code>in-progress</code> is a perfectly good reason to publish;
+						the half-finished ones are often the more interesting read.
+					</p>
+
+					<h2 id="documenting"><span class="num">03</span>How a Piece Is Documented</h2>
+					<p>
+						Each entry is a single markdown file in <code>src/content/assets/</code>. The filename
+						becomes the URL, the frontmatter drives every facet and spec on the page, and the body
+						is free-form build notes.
+					</p>
+
+					<h3>The workflow</h3>
+					<ul>
+						<li><b>Build it.</b> Photograph the awkward stages as you go — mid-build shots are the ones you cannot recreate later.</li>
+						<li><b>Note the recipe while it is fresh.</b> Paints, ratios, and what you would do differently.</li>
+						<li><b>Scan it, optionally.</b> See <a class="inline-link" href="#scans">The 3D Scans</a> below.</li>
+						<li><b>Write it up.</b> Copy an existing file in <code>src/content/assets/</code> and edit down.</li>
+						<li><b>Push.</b> The deploy workflow rebuilds and publishes on every push to <code>main</code>.</li>
+					</ul>
+
+					<h3>Frontmatter field reference</h3>
+					<p>
+						This is the live schema — every key the catalog understands, and what each one changes.
+					</p>
+
+					<div class="table-scroll">
+						<table class="spec-table">
+							<thead>
+								<tr><th>Field</th><th>Required</th><th>Example</th><th>What it does</th></tr>
+							</thead>
+							<tbody>
+								{fields.map((field) => (
+									<tr>
+										<td><code>{field.key}</code></td>
+										<td>{field.req ? <span class="req">Yes</span> : 'No'}</td>
+										<td><code>{field.example}</code></td>
+										<td>{field.note}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+
+					<div class="callout">
+						<b>Two conventions worth knowing —</b> the text before the em dash in
+						<code>category</code> becomes the Type filter, so keep those roots consistent
+						("Terrain — Tower", "Terrain — Tile"). And <code>warpstoneTouched</code> is the only
+						thing that triggers the neon glow: it is scoped to warpstone-touched Mordheim pieces
+						on purpose, never a generic hover effect.
+					</div>
+
+					<h2 id="materials"><span class="num">04</span>Materials &amp; Methods</h2>
+					<p class="placeholder">
+						A paragraph on how you tend to work — the materials you reach for first, the techniques
+						you have settled on, and the ones you are still fighting with.
+					</p>
+
+					<h3>Standard recipes</h3>
+					<p>
+						Recipes repeated across many pieces are worth writing once here and referencing from
+						individual entries, rather than retyping them in every build log.
+					</p>
+
+					<div class="table-scroll">
+						<table class="spec-table">
+							<thead>
+								<tr><th>Recipe</th><th>Steps</th></tr>
+							</thead>
+							<tbody>
+								<tr><td><b>Stone</b></td><td class="placeholder">Base coat → wash → dry-brush, with the ratios you actually use</td></tr>
+								<tr><td><b>Timber</b></td><td class="placeholder">Your go-to browns and how you get the grain to read</td></tr>
+								<tr><td><b>Rust &amp; metal</b></td><td class="placeholder">Stippling, sponging, or salt — whatever you swear by</td></tr>
+								<tr><td><b>Basing</b></td><td class="placeholder">Texture, flock, tufts, and the varnish that holds it together</td></tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="skel-note">
+						<span class="skel-label">To write</span>
+						<p>
+							Fill in whichever recipes you repeat most. Once these exist, individual build notes
+							can shrink to "stone recipe, plus a green wash in the shadows" instead of restating
+							the whole process each time.
+						</p>
+					</div>
+
+					<h2 id="scans"><span class="num">05</span>The 3D Scans</h2>
+					<p>
+						Pieces with a <code>modelSrc</code> get a rotatable viewport instead of a photo
+						gallery — a static image never quite conveys a terrain piece you are meant to walk
+						models through. Everything else falls back to photographs, which is a perfectly
+						respectable outcome and the default for most entries.
+					</p>
+					<p>
+						Models are exported from Blender as binary <code>.glb</code>, compressed, committed to
+						a <code>models/</code> folder in this repo, and served through jsDelivr — which keeps
+						bandwidth off GitHub Pages and costs nothing.
+					</p>
+
+					<div class="callout">
+						<b>Compress before committing —</b> raw exports run 20–50MB. Draco compression brings
+						that to a few MB, which is the difference between a viewport that loads and one people
+						scroll past.
+					</div>
+
+					<div class="skel-note">
+						<span class="skel-label">To write</span>
+						<p>
+							If you settle on a scanning or export routine worth repeating — turntable setup,
+							lighting, decimation settings, the gltf-transform flags you land on — this is where
+							it belongs, so future-you is not re-deriving it from scratch.
+						</p>
+					</div>
+
+					<h2 id="colophon"><span class="num">06</span>Colophon</h2>
+					<p>
+						Built with Astro as a static site and deployed to GitHub Pages by a workflow that runs
+						on every push to <code>main</code>. Models are served from jsDelivr; the 3D viewports
+						use Google's <code>&lt;model-viewer&gt;</code> web component.
+					</p>
+
+					<div class="table-scroll">
+						<table class="spec-table">
+							<tbody>
+								<tr><td style="width:38%"><b>Light palette</b></td><td>Bone &amp; Brass — the default</td></tr>
+								<tr><td><b>Dark palette</b></td><td>Verdigris &amp; Warpstone, with the neon glow on drag</td></tr>
+								<tr><td><b>Display</b></td><td>Pirata One — hero titles and the wordmark only</td></tr>
+								<tr><td><b>Headings</b></td><td>Cinzel — section labels and rubric headings</td></tr>
+								<tr><td><b>Body</b></td><td>EB Garamond — the long read</td></tr>
+								<tr><td><b>Interface</b></td><td>Inter — nav, buttons, tables, meta</td></tr>
+							</tbody>
+						</table>
+					</div>
+
+					<div class="divider" style="margin:44px 0 30px;padding:0;">
+						<svg viewBox="0 0 24 24" fill="currentColor">
+							<path d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"></path>
+						</svg>
+					</div>
+
+					<h3>Elsewhere</h3>
+					<div class="skel-note">
+						<span class="skel-label">To add</span>
+						<p>Wherever you want people to find you or the work:</p>
+						<ul>
+							<li>Instagram or wherever the build photos go first</li>
+							<li>The repo, if you are happy for people to poke at it</li>
+							<li>An email address, if you want commission or trade enquiries</li>
+						</ul>
+					</div>
+
+					<p>
+						Ready to look at some models? <a class="inline-link" href={`${base}catalog/`}>Browse the catalog →</a>
+					</p>
+				</article>
+			</div>
+
+			<OnThisPage headings={headings} />
+		</div>
 	</div>
 </BaseLayout>
 
 <style>
-	code {
-		font-size: 0.9em;
-		padding: 0.15em 0.4em;
+	.about-wrap { padding-bottom: 80px; }
+
+	/* Keep running prose at a readable measure, but let the reference tables
+	   use the full content column — the field reference needs the room. */
+	.about-wrap article.prose { max-width: none; }
+	.about-wrap article.prose > p,
+	.about-wrap article.prose > ul,
+	.about-wrap article.prose > h2,
+	.about-wrap article.prose > h3,
+	.about-wrap article.prose > .callout,
+	.about-wrap article.prose > .skel-note {
+		max-width: 72ch;
+	}
+	.about-wrap .page-header { padding-bottom: 0; }
+	.about-wrap .page-header .dek { margin-bottom: 0; }
+	article code {
+		font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+		font-size: 0.88em;
+		padding: 0.12em 0.4em;
 		background: var(--surface);
 		border: 1px solid var(--line);
-		border-radius: 0.25rem;
+		border-radius: 3px;
 	}
 </style>

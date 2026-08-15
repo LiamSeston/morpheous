@@ -1,12 +1,13 @@
 import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { SYSTEMS } from './lib/systems';
 
 const assets = defineCollection({
 	loader: glob({ base: './src/content/assets', pattern: '**/*.md' }),
 	schema: z.object({
 		title: z.string(),
-		system: z.enum(['Mordheim', 'Necromunda', 'Warhammer 40k', 'Other']),
+		system: z.enum(SYSTEMS),
 		category: z.string(), // "Terrain — Tower", "Warband — Hero", etc.
 		tags: z.array(z.string()).default([]),
 		materials: z.array(z.string()).default([]),

@@ -3,23 +3,102 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import FilterBar from '../components/FilterBar.astro';
 import AssetGrid from '../components/AssetGrid.astro';
 import { getCollection } from 'astro:content';
+import { SYSTEMS, SYSTEM_BLURBS } from '../lib/systems';
+
+const base = import.meta.env.BASE_URL;
 
 const entries = (await getCollection('assets')).sort((a, b) =>
 	a.data.title.localeCompare(b.data.title),
 );
+
+const withScans = entries.filter((e) => e.data.modelSrc).length;
+const onTheBench = entries.filter((e) => e.data.status !== 'complete').length;
+const systemsCovered = new Set(entries.map((e) => e.data.system)).size;
+
+const ledger = [
+	{ n: entries.length, l: entries.length === 1 ? 'Piece' : 'Pieces' },
+	{ n: `${systemsCovered}/${SYSTEMS.length}`, l: 'Systems' },
+	{ n: withScans, l: '3D scans' },
+	{ n: onTheBench, l: 'On the bench' },
+];
+
+// Coverage across every system in scope — including the ones with nothing in
+// them yet, which render as prompts rather than being quietly omitted.
+const coverage = SYSTEMS.map((system) => ({
+	system,
+	blurb: SYSTEM_BLURBS[system],
+	count: entries.filter((e) => e.data.system === system).length,
+}));
 ---
 
-<BaseLayout title="Catalog">
-	<div class="container">
+<BaseLayout
+	title="Catalog"
+	description="Every terrain piece, warband model, and miniature in the collection — filterable by system, type, and whether it has a 3D scan."
+>
+	<div class="container catalog-wrap">
 		<header class="page-header">
-			<h1>Catalog</h1>
-			<p>
-				Every terrain piece, warband model, and miniature across every system I build for —
-				filter by system or type to browse.
+			<h1>The <span class="rubric-mark">Catalog</span></h1>
+			<p class="dek">
+				One unified record across every system on the bench — sorted by what each piece actually
+				is, not which box it came out of.
 			</p>
 		</header>
 
+		<div class="ledger">
+			{ledger.map((stat) => (
+				<div class="ledger-stat">
+					<span class="n">{stat.n}</span>
+					<span class="l">{stat.l}</span>
+				</div>
+			))}
+		</div>
+
+		<h2 class="section-label" style="text-align:left;margin-bottom:16px;">Coverage by System</h2>
+		<div class="system-strip">
+			{coverage.map((item) =>
+				item.count > 0 ? (
+					<button type="button" class="system-tile" data-filter-system={item.system}>
+						<span class="sys-name">{item.system}</span>
+						<span class="sys-count">{item.count} catalogued</span>
+						<p class="sys-blurb">{item.blurb}</p>
+					</button>
+				) : (
+					<div class="system-tile empty">
+						<span class="sys-name">{item.system}</span>
+						<span class="sys-count">Nothing yet</span>
+						<p class="sys-blurb">{item.blurb}</p>
+					</div>
+				),
+			)}
+		</div>
+
+		<div class="skel-note">
+			<span class="skel-label">Skeleton — catalog coverage</span>
+			<p>
+				Every system in scope gets a tile here, whether or not it has entries yet. A dashed tile is
+				a standing invitation: add one markdown file under <code>src/content/assets/</code> with
+				that <code>system:</code> value and it becomes a live, clickable filter.
+			</p>
+			<p>
+				To change which systems exist at all, edit <code>src/lib/systems.ts</code> — that list
+				drives this strip, the filter pills, and the schema's allowed values in one place.
+			</p>
+		</div>
+
+		<h2 class="section-label" style="text-align:left;margin-bottom:16px;">Browse Everything</h2>
 		<FilterBar entries={entries} />
 		<AssetGrid entries={entries} />
+
+		<div class="callout">
+			<b>Adding a piece —</b> each entry in this catalog is a single markdown file. The
+			<a class="inline-link" href={`${base}about/#documenting`}>field reference on the About page</a>
+			lists every frontmatter key, which are required, and what each one drives on the page.
+		</div>
 	</div>
 </BaseLayout>
+
+<style>
+	.catalog-wrap { padding-bottom: 80px; }
+	.page-header { padding-bottom: 0.5rem; }
+	.page-header .dek { margin-bottom: 0; }
+</style>
