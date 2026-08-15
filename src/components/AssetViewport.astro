@@ -1,0 +1,123 @@
+---
+// src/components/AssetViewport.astro
+// Usage:
+// <AssetViewport
+//   src="https://cdn.jsdelivr.net/gh/LiamSeston/morpheous@main/models/watchtower.glb"
+//   poster="/images/watchtower-poster.jpg"
+//   alt="Ruined Watchtower terrain piece"
+// />
+interface Props {
+  src: string;
+  poster?: string;
+  alt: string;
+}
+const { src, poster, alt } = Astro.props;
+---
+
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js"></script>
+
+<div class="viewport-card" id="viewportCard">
+  <model-viewer
+    id="viewer"
+    src={src}
+    poster={poster}
+    alt={alt}
+    camera-controls
+    auto-rotate
+    auto-rotate-delay="0"
+    rotation-per-second="18deg"
+    shadow-intensity="1"
+    exposure="1"
+    interaction-prompt="none"
+  ></model-viewer>
+
+  <div class="viewport-toolbar">
+    <button class="vt-btn active" id="autorotateBtn">⟳ Auto-rotate</button>
+    <button class="vt-btn" id="resetBtn">↺ Reset view</button>
+  </div>
+</div>
+
+<style>
+  .viewport-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: background-color .35s ease, border-color .5s ease, box-shadow .5s ease;
+  }
+
+  model-viewer {
+    width: 100%;
+    height: 420px;
+    display: block;
+    --poster-color: transparent;
+  }
+
+  /* Neon outline — dark mode only, triggered while the user is dragging */
+  :root[data-theme="dark"] .viewport-card.card-glow {
+    border-color: var(--warpstone);
+    animation: neonPulse 1.7s ease-in-out infinite;
+  }
+  @keyframes neonPulse {
+    0%, 100% {
+      box-shadow:
+        0 0 0 1px var(--warpstone-soft),
+        0 0 16px 2px var(--warpstone-mid),
+        0 0 42px 10px var(--warpstone-far),
+        inset 0 0 24px rgba(127,227,160,0.08);
+    }
+    50% {
+      box-shadow:
+        0 0 0 1.5px var(--warpstone),
+        0 0 26px 4px var(--warpstone-soft),
+        0 0 64px 18px var(--warpstone-mid),
+        inset 0 0 36px rgba(127,227,160,0.14);
+    }
+  }
+
+  .viewport-toolbar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 12px 16px; border-top: 1px solid var(--line);
+    font-family: var(--font-ui); font-size: 12.5px; color: var(--text-dim);
+  }
+  .vt-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 11px; border: 1px solid var(--line); border-radius: var(--radius);
+    background: var(--page-bg); color: var(--text-dim); cursor: pointer;
+    font-family: inherit; font-size: 12.5px;
+  }
+  .vt-btn:hover { border-color: var(--accent); color: var(--text); }
+  .vt-btn.active { border-color: var(--accent); color: var(--text); background: var(--accent-wash); }
+</style>
+
+<script>
+  const card = document.getElementById('viewportCard');
+  const viewer = document.getElementById('viewer') as any;
+  const autorotateBtn = document.getElementById('autorotateBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  // model-viewer fires native pointer events on its host element before
+  // consuming them for its own orbit controls, so we can listen directly.
+  function glowOn() { card?.classList.add('card-glow'); }
+  function glowOff() { card?.classList.remove('card-glow'); }
+
+  viewer?.addEventListener('pointerdown', glowOn);
+  window.addEventListener('pointerup', glowOff);
+  viewer?.addEventListener('pointercancel', glowOff);
+
+  autorotateBtn?.addEventListener('click', () => {
+    const isOn = viewer.hasAttribute('auto-rotate');
+    if (isOn) {
+      viewer.removeAttribute('auto-rotate');
+      autorotateBtn.classList.remove('active');
+    } else {
+      viewer.setAttribute('auto-rotate', '');
+      autorotateBtn.classList.add('active');
+    }
+  });
+
+  resetBtn?.addEventListener('click', () => {
+    viewer?.resetTurntableRotation?.();
+    viewer?.jumpCameraToGoal?.();
+  });
+</script>

@@ -1,20 +1,21 @@
 ---
 title: Ruined Chapel
-type: building
+system: Mordheim
+category: "Terrain — Building"
 status: in-progress
-dimensions: "8×6×10 in"
+footprint: "8×6×10 in"
 materials:
   - XPS foam
   - balsa
   - plasticard
 tags:
-  - ruins
-  - chapel
-  - multi-level
-heroImage: /images/terrain/ruined-chapel/hero.svg
-gallery:
+  - Terrain
+  - Ruins
+  - Multi-level
+warpstoneTouched: false
+images:
+  - /images/terrain/ruined-chapel/hero.svg
   - /images/terrain/ruined-chapel/wip-01.svg
-started: 2026-08-01
 ---
 
 ## Build Notes

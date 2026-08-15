@@ -1,0 +1,69 @@
+---
+import AssetCard from './AssetCard.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	entries: CollectionEntry<'assets'>[];
+}
+
+const { entries } = Astro.props;
+---
+
+<div class="asset-grid" id="asset-grid">
+	{entries.map((entry) => (
+		<AssetCard entry={entry} />
+	))}
+	<p class="empty-state is-hidden" id="empty-state">No pieces match the current filters.</p>
+</div>
+
+<script>
+	function setupFilters() {
+		const systemButtons = document.querySelectorAll<HTMLButtonElement>('[data-filter-system]');
+		const kindButtons = document.querySelectorAll<HTMLButtonElement>('[data-filter-kind]');
+		const cards = document.querySelectorAll<HTMLElement>('.asset-card');
+		const emptyState = document.getElementById('empty-state');
+
+		let activeSystem = 'all';
+		let activeKind = 'all';
+
+		function applyFilters() {
+			let visibleCount = 0;
+
+			cards.forEach((card) => {
+				const cardSystem = card.dataset.system;
+				const cardKind = card.dataset.kind;
+				const systemMatch = activeSystem === 'all' || cardSystem === activeSystem;
+				const kindMatch = activeKind === 'all' || cardKind === activeKind;
+				const visible = systemMatch && kindMatch;
+
+				card.classList.toggle('is-hidden', !visible);
+				if (visible) visibleCount += 1;
+			});
+
+			emptyState?.classList.toggle('is-hidden', visibleCount > 0);
+		}
+
+		function setActive(buttons: NodeListOf<HTMLButtonElement>, active: HTMLButtonElement) {
+			buttons.forEach((btn) => btn.classList.toggle('is-active', btn === active));
+		}
+
+		systemButtons.forEach((button) => {
+			button.addEventListener('click', () => {
+				activeSystem = button.dataset.filterSystem ?? 'all';
+				setActive(systemButtons, button);
+				applyFilters();
+			});
+		});
+
+		kindButtons.forEach((button) => {
+			button.addEventListener('click', () => {
+				activeKind = button.dataset.filterKind ?? 'all';
+				setActive(kindButtons, button);
+				applyFilters();
+			});
+		});
+	}
+
+	setupFilters();
+	document.addEventListener('astro:page-load', setupFilters);
+</script>

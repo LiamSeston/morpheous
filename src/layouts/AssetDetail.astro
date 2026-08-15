@@ -1,0 +1,96 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import AssetViewport from '../components/AssetViewport.astro';
+import PhotoGallery from '../components/PhotoGallery.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	entry: CollectionEntry<'assets'>;
+}
+
+const { entry } = Astro.props;
+const {
+	title,
+	system,
+	category,
+	tags,
+	materials,
+	footprint,
+	height,
+	status,
+	builtDate,
+	warpstoneTouched,
+	modelSrc,
+	modelPoster,
+	images,
+} = entry.data;
+
+const base = import.meta.env.BASE_URL;
+const resolvePoster = (path?: string) =>
+	path ? (path.startsWith('http') ? path : `${base}${path.replace(/^\//, '')}`) : undefined;
+
+const [categoryRoot] = category.split('—').map((s) => s.trim());
+---
+
+<BaseLayout title={title} description={`${title} — ${category} for ${system}.`}>
+	<div class="container wrap">
+		<div class="crumb">
+			<a href={`${base}catalog/`}>Catalog</a> / {categoryRoot} / {title}
+		</div>
+
+		<h1 class="page-title">{title}</h1>
+
+		<div class="tags">
+			<span class="tag system">{system}</span>
+			{tags.map((t: string) => <span class="tag">{t}</span>)}
+			{warpstoneTouched && <span class="tag warp">Warpstone-touched</span>}
+			<StatusBadge status={status} />
+		</div>
+
+		<div class="layout">
+			<div>
+				{modelSrc ? (
+					<AssetViewport src={modelSrc} poster={resolvePoster(modelPoster)} alt={title} />
+				) : (
+					<PhotoGallery images={images} title={title} />
+				)}
+
+				<article class="prose">
+					<slot />
+				</article>
+			</div>
+
+			<aside class="meta-card">
+				<div class="meta-title">Details</div>
+				<div class="meta-row"><span class="k">System</span><span class="v">{system}</span></div>
+				<div class="meta-row"><span class="k">Category</span><span class="v">{category}</span></div>
+				{materials.length > 0 && (
+					<div class="meta-row"><span class="k">Materials</span><span class="v">{materials.join(', ')}</span></div>
+				)}
+				{footprint && <div class="meta-row"><span class="k">Footprint</span><span class="v">{footprint}</span></div>}
+				{height && <div class="meta-row"><span class="k">Height</span><span class="v">{height}</span></div>}
+				{builtDate && (
+					<div class="meta-row">
+						<span class="k">Built</span>
+						<span class="v">
+							{builtDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' })}
+						</span>
+					</div>
+				)}
+			</aside>
+		</div>
+	</div>
+</BaseLayout>
+
+<style>
+	.wrap { padding-block: 40px 90px; }
+	h1.page-title {
+		font-family: var(--font-display); font-weight: 400; font-size: 46px; line-height: 1.05;
+		margin: 0 0 14px; color: var(--text);
+	}
+	.tags { margin-bottom: 32px; }
+	.layout { display: grid; grid-template-columns: 1.3fr 0.85fr; gap: 44px; align-items: start; }
+	@media (max-width: 920px) { .layout { grid-template-columns: 1fr; } }
+	article.prose { margin-top: 40px; }
+</style>

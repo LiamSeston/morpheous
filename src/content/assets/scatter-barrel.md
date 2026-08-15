@@ -1,18 +1,21 @@
 ---
 title: Barrel Cluster
-type: scatter
+system: Mordheim
+category: "Terrain — Scatter"
 status: complete
-dimensions: "3×3×2 in"
+footprint: "3×3×2 in"
 materials:
   - plastic barrels
   - cork
   - sand
 tags:
-  - scatter
-  - market
-  - cover
-heroImage: /images/terrain/scatter-barrel/hero.svg
-completed: 2026-07-15
+  - Terrain
+  - Market
+  - Cover
+warpstoneTouched: false
+builtDate: 2026-07-15
+images:
+  - /images/terrain/scatter-barrel/hero.svg
 ---
 
 ## Build Notes
