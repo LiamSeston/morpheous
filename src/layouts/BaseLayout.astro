@@ -2,6 +2,7 @@
 import '../styles/theme.css';
 import '../styles/global.css';
 import ThemeToggle from '../components/ThemeToggle.astro';
+import Seal from '../components/Seal.astro';
 import { withBase, stripBase } from '../lib/url';
 
 interface Props {
@@ -57,12 +58,7 @@ const currentPath = stripBase(base, Astro.url.pathname);
 	<body>
 		<header class="site-header">
 			<div class="brand">
-				<svg class="seal" viewBox="0 0 24 24" fill="none">
-					<path
-						d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"
-						fill="var(--accent-bright)"
-					></path>
-				</svg>
+				<Seal size={24} class="seal" />
 				<a href={withBase(base)} style="color:inherit;">Morpheous</a>
 			</div>
 			<nav class="site-nav" aria-label="Main">
