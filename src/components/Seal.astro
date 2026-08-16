@@ -1,21 +1,22 @@
 ---
 // src/components/Seal.astro
-// The site's brand mark — Blackletter Initial: an "M" in Pirata One inside a
-// plain circle. Chosen over rune/sigil directions because it stays neutral
-// across Mordheim/40k/Necromunda content rather than reading as
-// Old-World-specific. One of the four places Pirata One is allowed to
-// appear (see TYPOGRAPHY.md).
+// The site's brand mark — a 7-point star, replacing the earlier blackletter
+// "M" mark everywhere it appeared (nav bar, hero, favicon, divider
+// ornaments). 7 points specifically to avoid other symbols' associations
+// (4-point reads as a generic AI-product sparkle, 5-point is the generic
+// "star" cliché, 6-point can read as Star of David, 8-point is the
+// Chaos-symbol count). Ray tips are flat-cut rather than sharp, echoing the
+// square-cap/mitered-join language used across the icon set so the seal
+// reads as part of the same designed system.
 //
-// This is the on-page mark — used as the center ornament in `.divider`
-// rules (landing + about pages). It relies on the Pirata One webfont
-// already loaded site-wide in BaseLayout's <head>, which is reliable in
-// normal page rendering. It is NOT used for the favicon: browsers
-// frequently fail to load @font-face in the more restricted favicon
-// rendering context, so public/favicon.svg instead bakes the same glyph in
-// as a real vector path. See FAVICON.md.
+// Pure vector path, no font dependency — safe to use anywhere, including
+// as the favicon source, with no risk of silently falling back to a
+// different glyph the way the font-based M could.
 //
-// Usage: <Seal size={16} /> inside a `.divider` — color comes from the
-// parent's `color` (currentColor).
+// Usage:
+//   <Seal size={24} />            — nav bar / divider scale
+//   <Seal size={46} />            — hero scale
+//   <Seal size={24} class="..." />
 
 interface Props {
   size?: number;
@@ -24,14 +25,13 @@ interface Props {
 const { size = 24, class: className = '' } = Astro.props;
 ---
 
-<svg width={size} height={size} viewBox="0 0 24 24" class={`seal-mark ${className}`} aria-hidden="true">
-  <circle cx="12" cy="12" r="9.3" fill="none" stroke="currentColor" stroke-width="1.4" />
-  <text x="12" y="16.6" text-anchor="middle" fill="currentColor">M</text>
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="currentColor"
+  class={className}
+  aria-hidden="true"
+>
+  <path d="M12,12 L13.4,12 L12.5,2 L11.5,2 L10.6,12 Z M12,12 L12.87,13.09 L20.13,6.16 L19.51,5.38 L11.13,10.91 Z M12,12 L11.69,13.365 L21.64,14.72 L21.86,13.74 L12.31,10.635 Z M12,12 L10.74,12.61 L15.89,21.22 L16.79,20.78 L13.26,11.39 Z M12,12 L13.26,12.61 L8.11,21.22 L7.21,20.78 L10.74,11.39 Z M12,12 L12.31,13.365 L2.14,13.74 L2.36,14.72 L11.69,10.635 Z M12,12 L11.13,13.09 L3.87,6.16 L4.49,5.38 L12.87,10.91 Z"/>
 </svg>
-
-<style>
-  .seal-mark text {
-    font-family: var(--font-display);
-    font-size: 13px;
-  }
-</style>

@@ -58,7 +58,7 @@
    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Cinzel:wght@500;600;700&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 */
 :root {
-  --font-display: 'Pirata One', serif;   /* hero titles / logo only — sparing use */
+  --font-display: 'Pirata One', serif;   /* hero titles / nav wordmark only — sparing use */
   --font-heading: 'Cinzel', serif;       /* h2/h3, rubric-style section labels */
   --font-body: 'EB Garamond', serif;     /* body copy — the "tame" read */
   --font-ui: 'Inter', sans-serif;        /* nav, buttons, meta labels */
