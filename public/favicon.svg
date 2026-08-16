@@ -1,12 +1,10 @@
 <!--
-  public/favicon.svg — Blackletter Initial seal mark.
+  public/favicon.svg — the 7-point star seal, flat-cut ray tips.
 
-  The "M" is a real vector <path>, extracted from the actual Pirata One
-  glyph outline with opentype.js (see scripts/extract-favicon-glyph.js) —
-  not live text set in the webfont. Favicons render in a more restricted
-  context than a normal page (Safari, pinned tabs, OS icon caches) where
-  @font-face frequently fails to load, so this has no runtime font
-  dependency at all. See FAVICON.md.
+  Pure vector path — no @font-face or text dependency, so unlike the
+  earlier blackletter-M version this renders identically everywhere SVG
+  favicons are supported (Safari, pinned tabs, OS icon caches included).
+  See FAVICON.md.
 
   Colors invert for OS-level dark mode via a plain media query (no font
   needed for that either) so it still reads on a dark browser chrome.
@@ -14,12 +12,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
   <style>
     .ink { fill: #171310; }
-    .ink-line { stroke: #171310; }
     @media (prefers-color-scheme: dark) {
       .ink { fill: #E7E1D2; }
-      .ink-line { stroke: #E7E1D2; }
     }
   </style>
-  <circle cx="12" cy="12" r="9.3" fill="none" class="ink-line" stroke-width="1.4"/>
-  <path class="ink" d="M7.55 16.50L7.55 8.01Q7.55 7.45 7.32 7.05Q7.08 6.65 6.73 6.65L6.73 6.28Q6.85 6.26 8.56 5.25Q8.68 5.28 8.85 5.34Q9.02 5.40 9.29 5.67Q9.57 5.94 9.57 6.29Q9.67 6.24 10.14 5.97Q11.39 5.27 11.68 5.27Q11.97 5.27 12.34 5.57Q12.70 5.87 12.88 6.29Q12.92 6.28 13.57 5.94Q14.88 5.27 15.15 5.27Q15.69 5.27 16.16 5.97Q16.63 6.68 16.63 7.27L16.63 15.72Q16.63 16.65 17.46 16.82L17.46 17.19L15.62 18.21Q15.25 18.06 14.93 17.72Q14.61 17.37 14.61 17.07L14.61 8.83Q14.61 7.82 14.29 7.43Q13.96 7.03 13.10 7L13.10 15.72Q13.10 16.65 13.92 16.82L13.92 17.19L12.09 18.21Q11.72 18.06 11.40 17.72Q11.08 17.37 11.08 17.07L11.08 8.83Q11.08 7.77 10.77 7.39Q10.46 7 9.57 7L9.57 15.62Q9.57 16.25 9.71 16.51Q9.84 16.78 10.26 16.78L10.26 17.30L6.81 18.75L6.54 18.21Q6.91 18.21 7.25 17.77Q7.55 17.35 7.55 16.50"/>
+  <path class="ink" d="M12,12 L13.4,12 L12.5,2 L11.5,2 L10.6,12 Z M12,12 L12.87,13.09 L20.13,6.16 L19.51,5.38 L11.13,10.91 Z M12,12 L11.69,13.365 L21.64,14.72 L21.86,13.74 L12.31,10.635 Z M12,12 L10.74,12.61 L15.89,21.22 L16.79,20.78 L13.26,11.39 Z M12,12 L13.26,12.61 L8.11,21.22 L7.21,20.78 L10.74,11.39 Z M12,12 L12.31,13.365 L2.14,13.74 L2.36,14.72 L11.69,10.635 Z M12,12 L11.13,13.09 L3.87,6.16 L4.49,5.38 L12.87,10.91 Z"/>
 </svg>

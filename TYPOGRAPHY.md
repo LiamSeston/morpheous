@@ -4,17 +4,22 @@
 
 | Role | Typeface | CSS variable |
 |---|---|---|
-| Hero title, seal mark, favicon, nav wordmark | **Pirata One** | `--font-display` |
+| Hero title, nav wordmark | **Pirata One** | `--font-display` |
 | All h2/h3 headings, subheadings, nav links, dense doc lists, tags | **Cinzel** | `--font-heading` |
 | Body copy, paragraph text | **EB Garamond** | `--font-body` |
 | UI chrome — buttons, search, meta labels, toolbar text | **Inter** | `--font-ui` |
 
 ## The rule that matters most
 
-**Pirata One (true blackletter) is reserved for exactly four places: the
-hero `<h1>`, the seal/brand mark, the favicon, and the nav bar wordmark.**
-It never appears in body headings, sidebar nav, tags, or anything read at
-a glance rather than paused on.
+**Pirata One (true blackletter) is reserved for exactly two places: the
+hero `<h1>` and the nav bar wordmark.** It never appears in body headings,
+sidebar nav, tags, or anything read at a glance rather than paused on —
+and, as of the seal mark's move to a pure-vector 7-point star (see
+`src/components/Seal.astro`), it no longer appears in the brand mark or
+favicon either. Those needed no lettering at all once the mark stopped
+being a letterform, which incidentally also removed the whole
+font-loading-reliability problem the favicon used to have (see
+FAVICON.md).
 
 This isn't arbitrary — we tested it directly. A single glyph at hero size
 (64px+) reads fine in blackletter. Full words at heading size (20-26px)
@@ -49,8 +54,11 @@ For anyone revisiting this later — these were tested and deliberately
 not chosen, so there's no need to re-litigate them from scratch:
 
 - **UnifrakturMaguntia / UnifrakturCook** — heavier, more traditionally
-  Fraktur than Pirata One. Tested as a seal-mark alternative; rejected in
-  favor of staying with Pirata One for consistency with the hero title.
+  Fraktur than Pirata One. Tested during an earlier round when the seal
+  mark was still a letterform (a blackletter "M"); rejected in favor of
+  staying with Pirata One for consistency with the hero title. The whole
+  question became moot once the seal moved to a lettering-free 7-point
+  star — a later decision than this comparison, kept here for history.
 - **Almendra SC, Metamorphous, IM Fell English SC, Spectral SC** — tested
   as h2/h3 alternatives to Cinzel. Almendra SC was the strongest
   contender, but the decision was to keep Cinzel rather than introduce a
