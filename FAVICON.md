@@ -1,11 +1,20 @@
 # Favicon — Production Notes
 
-**Status: done.** `public/favicon.svg` is the 7-point star seal (flat-cut
-ray tips) as a plain vector `<path>` — no font dependency of any kind, so
-there's no risk of it silently rendering as the wrong glyph anywhere. The
-full raster set (`favicon.ico`, `apple-touch-icon.png`, Android chrome
-icons, `site.webmanifest`) is generated and wired into
-`BaseLayout.astro`'s `<head>`.
+**Status: done.** `public/favicon.svg` is the 7-point star seal — a solid
+center hub plus seven rays, all built from one consistent path formula —
+as a plain vector `<path>`, no font dependency of any kind, so there's no
+risk of it silently rendering as the wrong glyph anywhere. The full raster
+set (`favicon.ico`, `apple-touch-icon.png`, Android chrome icons,
+`site.webmanifest`) is generated and wired into `BaseLayout.astro`'s
+`<head>`.
+
+An earlier version of the star tapered each ray to a bare point at
+center and mixed mirrored/non-mirrored ray paths, which caused
+inconsistent winding and made the mark look thin and disconnected at
+small (nav bar / favicon) sizes — exactly the sizes it's mostly used at.
+The current version fixes that: every ray shares one formula, and the
+solid hub means everything connects through something solid instead of
+a point.
 
 The seal mark previously used a blackletter "M" set in the Pirata One
 webfont, which needed a separate `opentype.js` glyph-extraction step
