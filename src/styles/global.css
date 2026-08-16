@@ -27,7 +27,7 @@ h1, h2, h3 {
   display: flex; align-items: center; gap: 10px;
   font-family: var(--font-display); font-size: 26px; color: var(--text);
 }
-.brand .seal { width: 24px; height: 24px; color: var(--accent-bright); }
+.brand .seal { width: 24px; height: 24px; }
 .site-nav { display: flex; gap: 2px; margin-left: 8px; font-family: var(--font-ui); font-size: 13.5px; font-weight: 500; }
 .site-nav a { padding: 8px 12px; color: var(--text-dim); border-bottom: 2px solid transparent; }
 .site-nav a:hover { color: var(--text); text-decoration: none; }
@@ -44,7 +44,6 @@ h1, h2, h3 {
   font-family: var(--font-heading); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
   color: var(--accent-bright); margin-bottom: 18px;
 }
-.hero .seal-lg { width: 46px; height: 46px; margin: 0 auto 22px; opacity: 0.9; color: var(--accent-bright); }
 h1.hero-title {
   font-family: var(--font-display); font-weight: 400; font-size: 74px; line-height: 1.02; margin: 0 0 18px;
   color: var(--text);
@@ -106,10 +105,7 @@ h1.hero-title {
   padding: 5px 10px; border: 1px solid var(--accent); color: var(--accent-bright);
   border-radius: 20px; background: var(--accent-wash); display: inline-block;
 }
-.tag.system {
-  border-color: var(--line); color: var(--text-dim); background: transparent;
-  display: inline-flex; align-items: center; gap: 4px;
-}
+.tag.system { border-color: var(--line); color: var(--text-dim); background: transparent; }
 .tag.status { border-color: var(--line); color: var(--text-dim); background: transparent; }
 .tag.warp { display: none; }
 :root[data-theme="dark"] .tag.warp {
@@ -157,7 +153,6 @@ h1.hero-title {
 }
 .filter-btn:hover { border-color: var(--accent); color: var(--text); }
 .filter-btn.is-active { border-color: var(--accent); background: var(--accent-wash); color: var(--accent-bright); }
-.filter-btn--icon { display: inline-flex; align-items: center; gap: 5px; }
 
 /* ---------- Meta card (asset detail sidebar) ---------- */
 .meta-card { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 22px 22px 8px; transition: background-color .35s ease, border-color .35s ease; }
@@ -205,9 +200,6 @@ article code {
   font-family: var(--font-ui); font-size: 12px; color: var(--text-dim);
 }
 .footer-brand { font-family: var(--font-display); font-size: 16px; color: var(--text-dim); }
-.footer-credit { font-size: 11px; opacity: 0.85; }
-.footer-credit a { color: var(--text-dim); border-bottom: 1px solid var(--line); }
-.footer-credit a:hover { color: var(--text); border-color: var(--accent); text-decoration: none; }
 
 /* ---------- Long-form content pages (about, and future build-log / rules) ----------
    Structure borrowed from the original docs mockup — italic dek, drop-cap lede,

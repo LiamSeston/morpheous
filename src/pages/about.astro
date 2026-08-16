@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import OnThisPage from '../components/OnThisPage.astro';
+import Seal from '../components/Seal.astro';
 import { getCollection } from 'astro:content';
 import { SYSTEMS, SYSTEM_BLURBS } from '../lib/systems';
 import { withBase } from '../lib/url';
@@ -57,9 +58,7 @@ const fields = [
 				</header>
 
 				<div class="divider" style="margin:24px 0 30px;padding:0;">
-					<svg viewBox="0 0 24 24" fill="currentColor">
-						<path d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"></path>
-					</svg>
+					<Seal size={16} />
 				</div>
 
 				<article class="prose">
@@ -270,9 +269,7 @@ const fields = [
 					</div>
 
 					<div class="divider" style="margin:44px 0 30px;padding:0;">
-						<svg viewBox="0 0 24 24" fill="currentColor">
-							<path d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"></path>
-						</svg>
+						<Seal size={16} />
 					</div>
 
 					<h3>Elsewhere</h3>

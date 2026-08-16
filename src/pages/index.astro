@@ -1,8 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Seal from '../components/Seal.astro';
-import Icon from '../components/Icon.astro';
-import TerrainFlourish from '../components/TerrainFlourish.astro';
 import { getCollection } from 'astro:content';
 import { withBase } from '../lib/url';
 
@@ -32,7 +30,6 @@ function resolveImage(path: string) {
 <BaseLayout title="Morpheous">
 	<section class="hero">
 		<div class="kicker">A Modelling &amp; Terrain Catalog</div>
-		<Seal size={46} class="seal-lg" />
 		<h1 class="hero-title">Morpheous</h1>
 		<p class="hero-dek">
 			A living record of everything I build on the tabletop — Mordheim terrain and warbands,
@@ -46,9 +43,7 @@ function resolveImage(path: string) {
 	</section>
 
 	<div class="divider">
-		<svg viewBox="0 0 24 24" fill="currentColor">
-			<path d="M12 2 L14.5 9 L22 9 L16 13.5 L18 21 L12 16.5 L6 21 L8 13.5 L2 9 L9.5 9 Z"></path>
-		</svg>
+		<Seal size={16} />
 	</div>
 
 	<section class="intent">
@@ -65,7 +60,9 @@ function resolveImage(path: string) {
 		<h2 class="section-label">What You'll Find Here</h2>
 		<div class="feature-grid">
 			<div class="feature-card">
-				<TerrainFlourish size={38} class="ficon" />
+				<svg class="ficon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+					<path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"></path>
+				</svg>
 				<h3>Terrain Catalog</h3>
 				<p>
 					Every scratch-built ruin, tower, and rubble pile — with materials, dimensions, and the
@@ -73,13 +70,19 @@ function resolveImage(path: string) {
 				</p>
 			</div>
 			<div class="feature-card">
-				<Icon name="viewport3d" size={38} class="ficon" />
+				<svg class="ficon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+					<path d="M12 2 21 7 21 17 12 22 3 17 3 7 12 2Z"></path>
+					<path d="M3 7l9 5 9-5M12 12v10"></path>
+				</svg>
 				<h3>Live 3D Viewports</h3>
 				<p>Rotatable scans you can inspect right in the browser, instead of a single static photo.</p>
 				<span class="hint">Warpstone-touched pieces glow when you drag them, in dark mode</span>
 			</div>
 			<div class="feature-card">
-				<Icon name="buildLog" size={38} class="ficon" />
+				<svg class="ficon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+					<path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+					<path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+				</svg>
 				<h3>Build Logs</h3>
 				<p>Paint recipes, basing techniques, and the materials and notes behind every piece.</p>
 			</div>
@@ -105,7 +108,7 @@ function resolveImage(path: string) {
 							<div class="asset-body">
 								<div class="tag-row">
 									<span class="tag">{categoryRoot}</span>
-									<span class="tag system"><Icon name="systemTag" size={11} /> {system}</span>
+									<span class="tag system">{system}</span>
 									{warpstoneTouched && <span class="tag warp">Warpstone-touched</span>}
 								</div>
 								<h3>{title}</h3>
