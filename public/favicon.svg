@@ -1,5 +1,11 @@
 <!--
-  public/favicon.svg — the 7-point star seal, flat-cut ray tips.
+  public/favicon.svg — the 7-point star seal, v3.
+
+  v3 fixes a bug where the mark rendered as a thin, disconnected-looking
+  spindle at small (favicon/nav) sizes: rays now share one consistent
+  path formula (no mirroring-induced winding mismatch) and a solid center
+  hub means everything connects through something solid instead of a
+  bare point.
 
   Pure vector path — no @font-face or text dependency, so unlike the
   earlier blackletter-M version this renders identically everywhere SVG
@@ -16,5 +22,6 @@
       .ink { fill: #E7E1D2; }
     }
   </style>
-  <path class="ink" d="M12,12 L13.4,12 L12.5,2 L11.5,2 L10.6,12 Z M12,12 L12.87,13.09 L20.13,6.16 L19.51,5.38 L11.13,10.91 Z M12,12 L11.69,13.365 L21.64,14.72 L21.86,13.74 L12.31,10.635 Z M12,12 L10.74,12.61 L15.89,21.22 L16.79,20.78 L13.26,11.39 Z M12,12 L13.26,12.61 L8.11,21.22 L7.21,20.78 L10.74,11.39 Z M12,12 L12.31,13.365 L2.14,13.74 L2.36,14.72 L11.69,10.635 Z M12,12 L11.13,13.09 L3.87,6.16 L4.49,5.38 L12.87,10.91 Z"/>
+  <circle class="ink" cx="12" cy="12" r="2.5"/>
+  <path class="ink" d="M12,12 L14.3,12 L12,1 L9.7,12 Z M12,12 L13.432,13.800 L20.609,5.152 L10.568,10.200 Z M12,12 L11.488,14.242 L22.724,14.448 L12.512,9.758 Z M12,12 L9.928,12.998 L16.773,21.911 L14.072,11.002 Z M12,12 L9.928,11.002 L7.227,21.911 L14.072,12.998 Z M12,12 L11.488,9.758 L1.276,14.448 L12.512,14.242 Z M12,12 L13.432,10.200 L3.391,5.152 L10.568,13.800 Z"/>
 </svg>

@@ -80,5 +80,5 @@ public/favicon.svg           7-point star brand mark
 
 - **Palette**: Bone & Brass (light) / Verdigris & Warpstone (dark). Warpstone glow is dark-mode exclusive, scoped only to pieces tagged as Mordheim/warpstone-touched.
 - **Fonts**: Pirata One (hero title + nav only), Cinzel (headings), EB Garamond (body), Inter (UI chrome)
-- **Brand mark**: 7-point star with flat-cut ray tips, matching the icon set's square-cap language
+- **Brand mark**: 7-point star with a solid center hub, no letterform — pure vector, no font dependency
 - **3D models**: Compressed and served via jsDelivr CDN to keep hosting cost near zero
