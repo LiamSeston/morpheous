@@ -25,6 +25,14 @@ const currentPath = stripBase(base, Astro.url.pathname);
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="description" content={description} />
+		<!--
+			Colours the browser chrome around the viewport — most visibly the
+			iOS Safari status bar. Without it Safari picks its own colour and
+			keeps it after the theme is toggled, leaving a light strip above a
+			dark page. The value here is only the pre-JS default; the script
+			below rewrites it to match the resolved theme.
+		-->
+		<meta name="theme-color" content="#EDE4D0" />
 		<link rel="icon" type="image/svg+xml" href={withBase(base, 'favicon.svg')} />
 		<link rel="icon" type="image/x-icon" href={withBase(base, 'favicon.ico')} sizes="16x16 32x32 48x48" />
 		<link rel="apple-touch-icon" sizes="180x180" href={withBase(base, 'apple-touch-icon.png')} />
@@ -37,8 +45,14 @@ const currentPath = stripBase(base, Astro.url.pathname);
 		-->
 		<script is:inline>
 			(function () {
+				// Mirrors --page-bg in theme.css. Hardcoded rather than read off
+				// the custom property because this runs before the stylesheet is
+				// guaranteed to have applied — keep the two in sync.
+				var PAGE_BG = { light: '#EDE4D0', dark: '#0B0E0C' };
 				function apply(theme) {
 					document.documentElement.setAttribute('data-theme', theme);
+					var meta = document.querySelector('meta[name="theme-color"]');
+					if (meta) meta.setAttribute('content', PAGE_BG[theme] || PAGE_BG.light);
 				}
 				var stored = localStorage.getItem('morpheous-theme');
 				var systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;

@@ -19,6 +19,10 @@
     border-radius: 20px; cursor: pointer;
     font-family: var(--font-ui); font-size: 12.5px; font-weight: 600;
     color: var(--text-dim);
+    /* Squeezed into a cramped header this otherwise breaks across two
+       lines mid-phrase ("Dark / mode") and drags the header height with it. */
+    white-space: nowrap;
+    flex-shrink: 0;
   }
   .theme-toggle:hover { border-color: var(--accent); color: var(--text); }
   .theme-toggle .icon { width: 15px; height: 15px; display: flex; }
@@ -38,6 +42,20 @@
     label.textContent = isDark ? 'Light mode' : 'Dark mode';
     iconEl.innerHTML = isDark ? sunIcon : moonIcon;
   }
+
+  // Keeps the browser chrome (notably the iOS Safari status bar) matching the
+  // page. Reads the live --page-bg token rather than repeating the hex values —
+  // by the time anyone can click, the stylesheet has applied. The pre-paint
+  // default is set by the inline script in BaseLayout.astro's <head>.
+  function syncThemeColor() {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (!meta) return;
+    const bg = getComputedStyle(document.documentElement)
+      .getPropertyValue('--page-bg')
+      .trim();
+    if (bg) meta.setAttribute('content', bg);
+  }
+
   syncLabel();
 
   btn?.addEventListener('click', () => {
@@ -46,7 +64,11 @@
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('morpheous-theme', next);
     syncLabel();
+    syncThemeColor();
   });
 
-  document.addEventListener('astro:page-load', syncLabel);
+  document.addEventListener('astro:page-load', () => {
+    syncLabel();
+    syncThemeColor();
+  });
 </script>
