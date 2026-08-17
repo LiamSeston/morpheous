@@ -83,6 +83,21 @@ const currentPath = stripBase(base, Astro.url.pathname);
 					setThemeColor(PAGE_BG[theme] || PAGE_BG.light);
 				}
 
+				// Safari commits to the theme-color it read while parsing <head>
+				// and does not reliably honour a change made before first paint.
+				// Whenever a stored preference disagrees with the OS, the tag
+				// installed above is exactly such a change — so install it again
+				// once the page is up, which Safari does act on. pageshow also
+				// covers bfcache restores, where iOS hands back a page whose
+				// chrome colour has gone stale.
+				function reassert() {
+					var theme = document.documentElement.getAttribute('data-theme');
+					setThemeColor(PAGE_BG[theme] || PAGE_BG.light);
+				}
+				document.addEventListener('DOMContentLoaded', reassert);
+				window.addEventListener('load', reassert);
+				window.addEventListener('pageshow', reassert);
+
 				// Shared with ThemeToggle.astro's click handler so theme state and
 				// chrome colour can only ever change together. A global is the
 				// pragmatic seam here: this block must stay inline to beat first

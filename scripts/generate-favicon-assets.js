@@ -90,7 +90,11 @@ async function main() {
 			{ src: 'android-chrome-192x192.png', sizes: '192x192', type: 'image/png' },
 			{ src: 'android-chrome-512x512.png', sizes: '512x512', type: 'image/png' },
 		],
-		theme_color: PAGE_BG,
+		// Deliberately no theme_color. A manifest colour is a single static
+		// value, so on a site with a light and a dark theme it is wrong half
+		// the time, and it competes with the theme-color meta tag that
+		// BaseLayout keeps in sync with the active theme. background_color
+		// stays because it only paints the install splash screen.
 		background_color: PAGE_BG,
 		display: 'standalone',
 	};

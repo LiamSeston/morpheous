@@ -65,7 +65,17 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* Paints the canvas — which on iOS includes the area behind the status bar
+     and the rest of the safe area — with the active theme. body's background
+     only reaches the canvas by propagation, and propagation applies while html
+     has no background of its own; making it explicit here means the strip
+     above the page is coloured by the page itself rather than left to the
+     browser's own chrome colour. */
+  background-color: var(--page-bg);
+  transition: background-color .35s ease;
+}
 body {
   margin: 0;
   background:
