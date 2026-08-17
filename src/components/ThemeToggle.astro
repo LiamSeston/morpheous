@@ -43,32 +43,19 @@
     iconEl.innerHTML = isDark ? sunIcon : moonIcon;
   }
 
-  // Keeps the browser chrome (notably the iOS Safari status bar) matching the
-  // page. Reads the live --page-bg token rather than repeating the hex values —
-  // by the time anyone can click, the stylesheet has applied. The pre-paint
-  // default is set by the inline script in BaseLayout.astro's <head>.
-  function syncThemeColor() {
-    const meta = document.querySelector('meta[name="theme-color"]');
-    if (!meta) return;
-    const bg = getComputedStyle(document.documentElement)
-      .getPropertyValue('--page-bg')
-      .trim();
-    if (bg) meta.setAttribute('content', bg);
-  }
-
   syncLabel();
 
   btn?.addEventListener('click', () => {
     const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     const next = isDark ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
+    // Defined by the inline script in BaseLayout.astro's <head>, which runs
+    // before this deferred module. It owns both data-theme and the theme-color
+    // meta, so routing the toggle through it keeps the page and the browser
+    // chrome from drifting apart.
+    (window as any).__morpheousApplyTheme(next);
     localStorage.setItem('morpheous-theme', next);
     syncLabel();
-    syncThemeColor();
   });
 
-  document.addEventListener('astro:page-load', () => {
-    syncLabel();
-    syncThemeColor();
-  });
+  document.addEventListener('astro:page-load', syncLabel);
 </script>
