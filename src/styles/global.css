@@ -32,6 +32,29 @@ h1, h2, h3 {
 .site-nav a { padding: 8px 12px; color: var(--text-dim); border-bottom: 2px solid transparent; }
 .site-nav a:hover { color: var(--text); text-decoration: none; }
 .site-nav a[aria-current="page"] { color: var(--text); border-bottom-color: var(--accent-bright); }
+
+/* Phones: brand + toggle can't share a row with the nav without forcing the
+   header — and so the whole page — wider than the viewport. Drop the nav onto
+   its own row and spread it edge to edge, which keeps all three links visible
+   (no hamburger needed for three items) and the tap targets generous. */
+@media (max-width: 700px) {
+  .site-header {
+    height: auto;
+    flex-wrap: wrap;
+    gap: 0 12px;
+    padding: 10px 20px;
+  }
+  .brand { font-size: 22px; gap: 8px; }
+  .brand .seal { width: 20px; height: 20px; }
+  .site-nav {
+    order: 3;
+    flex-basis: 100%;
+    justify-content: space-between;
+    margin-left: 0;
+    gap: 0;
+  }
+  .site-nav a { padding: 8px 2px; }
+}
 .nav-cta {
   padding: 8px 16px; border-radius: 20px; background: var(--accent); color: var(--page-bg);
   font-family: var(--font-ui); font-size: 12.5px; font-weight: 600; margin-left: auto;
@@ -45,7 +68,7 @@ h1, h2, h3 {
   color: var(--accent-bright); margin-bottom: 18px;
 }
 h1.hero-title {
-  font-family: var(--font-display); font-weight: 400; font-size: 74px; line-height: 1.02; margin: 0 0 18px;
+  font-family: var(--font-display); font-weight: 400; font-size: clamp(44px, 11vw, 74px); line-height: 1.02; margin: 0 0 18px;
   color: var(--text);
 }
 .hero-dek {
@@ -216,7 +239,10 @@ article code {
 .rubric-mark { color: var(--accent-bright); }
 
 .doc-shell { display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 56px; align-items: start; }
-@media (max-width: 1080px) { .doc-shell { grid-template-columns: 1fr; gap: 0; } .doc-toc { display: none; } }
+/* minmax(0, …) rather than a bare 1fr: a grid item's automatic minimum size
+   is its min-content width, so the nowrap spec tables would stretch this
+   column past the viewport and .table-scroll's overflow-x would never engage. */
+@media (max-width: 1080px) { .doc-shell { grid-template-columns: minmax(0, 1fr); gap: 0; } .doc-toc { display: none; } }
 
 .doc-toc { position: sticky; top: 88px; font-family: var(--font-ui); font-size: 13px; }
 .toc-title {
@@ -329,3 +355,27 @@ article a.inline-link:hover { color: var(--text); border-color: var(--text); tex
 .system-tile.empty .sys-count { color: var(--text-dim); opacity: 0.8; }
 
 .is-hidden { display: none !important; }
+
+/* ---------- Small screens ----------
+   The layout sections above each carry a 32px horizontal gutter, which is a
+   third of the usable width on a 375px phone. Pull the gutters in and relax
+   the fixed vertical rhythm; the header has its own rules up with the topbar.
+*/
+@media (max-width: 700px) {
+  .container { width: min(1200px, 100% - 2.5rem); }
+
+  .hero { padding: 56px 20px 32px; }
+  .hero-dek { font-size: 18px; }
+  .divider { margin: 38px auto; padding: 0 20px; }
+  .intent { padding: 0 20px 48px; font-size: 17.5px; }
+  .features { padding: 0 20px 56px; }
+  .preview { padding: 0 20px 64px; }
+  .site-footer { padding: 24px 20px; }
+
+  /* Drop caps set in the display face overhang badly at small measures. */
+  .intent p.lede::first-letter,
+  article p.lede::first-letter { font-size: 50px; }
+
+  /* Wide gaps meant for a desktop row become dead space once these wrap. */
+  .ledger { gap: 22px 28px; }
+}
