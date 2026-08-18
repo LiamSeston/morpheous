@@ -24,33 +24,24 @@ const currentPath = stripBase(base, Astro.url.pathname);
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta name="description" content={description} />
-		<!--
-			Colours the browser's own chrome on mobile — the iOS Safari toolbar
-			and the status bar area.
-
-			These must be *media-scoped and correct at parse time*, not a single
-			light default that script fixes up afterwards: Safari reads
-			theme-color while parsing <head> and routinely ignores a later
-			in-place `content` mutation, so a dark-mode visitor would keep a
-			light toolbar over a dark page.
-
-			They cover the case where the site theme matches the OS. When a
-			stored preference overrides the OS, the script below deletes both of
-			these and inserts a single unconditional tag — see the note there for
-			why it replaces rather than edits.
-		-->
-		<meta name="theme-color" content="#EDE4D0" media="(prefers-color-scheme: light)" />
-		<meta name="theme-color" content="#0B0E0C" media="(prefers-color-scheme: dark)" />
-		<link rel="icon" type="image/svg+xml" href={withBase(base, 'favicon.svg')} />
-		<link rel="icon" type="image/x-icon" href={withBase(base, 'favicon.ico')} sizes="16x16 32x32 48x48" />
-		<link rel="apple-touch-icon" sizes="180x180" href={withBase(base, 'apple-touch-icon.png')} />
-		<link rel="manifest" href={withBase(base, 'site.webmanifest')} />
 
 		<!--
-			Critical for avoiding a flash of the wrong theme: this reads
-			localStorage/matchMedia and sets data-theme before first paint.
-			Runs once here, in <head> — ThemeToggle.astro only owns the click handler.
+			Theme init. Deliberately the first thing in the head after charset and
+			viewport, and deliberately the ONLY source of a theme-color meta tag on
+			the page — there is no static one anywhere in this file, on purpose.
+
+			Safari commits to the theme-color it sees while parsing the head and
+			will not reliably repaint its chrome for a later change. So any static
+			tag written here would win — and a static tag can only encode the OS
+			preference, which is not the same thing as the theme the visitor picked.
+			Media-scoped static tags made that worse rather than better: they pinned
+			the chrome to the OS in both directions, so a dark site on a light phone
+			kept a light strip and a light site on a dark phone kept a dark one.
+
+			Running here, before any such tag exists, means the first and only value
+			Safari ever reads is the resolved one. This also sets data-theme before
+			first paint, which is what stops the page itself flashing the wrong
+			theme. ThemeToggle.astro owns only the click handler.
 		-->
 		<script is:inline>
 			(function () {
@@ -59,16 +50,13 @@ const currentPath = stripBase(base, Astro.url.pathname);
 				// guaranteed to have applied — keep the two in sync.
 				var PAGE_BG = { light: '#EDE4D0', dark: '#0B0E0C' };
 
-				// Replaces every theme-color tag with one unconditional tag.
+				// Leaves exactly one theme-color tag in the document.
 				//
-				// Replace rather than edit, for two independent reasons:
-				//   1. The static tags above are media-scoped, and the browser
-				//      honours the *first matching* theme-color. Editing one in
-				//      place loses to a stale sibling whenever the stored theme
-				//      disagrees with the OS — e.g. dark site on a light phone.
-				//   2. Safari often will not repaint its chrome for a `content`
-				//      mutation on a tag it has already read, but does for a
-				//      newly inserted node.
+				// Clearing first matters because the browser honours the first
+				// *matching* tag, so any leftover sibling could outrank the one we
+				// just wrote. Inserting a fresh node rather than editing one in
+				// place matters because Safari often will not repaint its chrome
+				// for a `content` mutation on a tag it has already read.
 				function setThemeColor(color) {
 					var existing = document.querySelectorAll('meta[name="theme-color"]');
 					for (var i = 0; i < existing.length; i++) existing[i].parentNode.removeChild(existing[i]);
@@ -83,13 +71,11 @@ const currentPath = stripBase(base, Astro.url.pathname);
 					setThemeColor(PAGE_BG[theme] || PAGE_BG.light);
 				}
 
-				// Safari commits to the theme-color it read while parsing <head>
-				// and does not reliably honour a change made before first paint.
-				// Whenever a stored preference disagrees with the OS, the tag
-				// installed above is exactly such a change — so install it again
-				// once the page is up, which Safari does act on. pageshow also
-				// covers bfcache restores, where iOS hands back a page whose
-				// chrome colour has gone stale.
+				// Belt and braces. The tag installed during head parsing should
+				// already be the only one Safari ever reads, but re-installing it
+				// once the page is up costs nothing and covers a stale commit.
+				// pageshow additionally covers bfcache restores, where iOS hands
+				// back a page whose chrome colour has gone stale.
 				function reassert() {
 					var theme = document.documentElement.getAttribute('data-theme');
 					setThemeColor(PAGE_BG[theme] || PAGE_BG.light);
@@ -109,6 +95,12 @@ const currentPath = stripBase(base, Astro.url.pathname);
 				apply(stored || (systemDark ? 'dark' : 'light'));
 			})();
 		</script>
+
+		<meta name="description" content={description} />
+		<link rel="icon" type="image/svg+xml" href={withBase(base, 'favicon.svg')} />
+		<link rel="icon" type="image/x-icon" href={withBase(base, 'favicon.ico')} sizes="16x16 32x32 48x48" />
+		<link rel="apple-touch-icon" sizes="180x180" href={withBase(base, 'apple-touch-icon.png')} />
+		<link rel="manifest" href={withBase(base, 'site.webmanifest')} />
 
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
